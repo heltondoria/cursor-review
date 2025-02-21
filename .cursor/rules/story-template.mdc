@@ -1,0 +1,102 @@
+---
+description: ALWAYS use when creating or updating story files to ensure proper tracking and implementation. This rule enforces consistent story structure with tasks, context, and progress tracking.
+globs: "**/*.story.md"
+---
+<?xml version="1.0" encoding="UTF-8"?>
+<cursor_rules>
+    <rule>
+        <n>story_template</n>
+        <description>Template for creating and updating story files</description>
+        
+        <filters>
+            <filter>
+                <type>file_pattern</type>
+                <pattern>\.ai/.*\.story\.md$</pattern>
+            </filter>
+        </filters>
+
+        <template>
+            <section name="header">
+                <title>Story {N}: {Title}</title>
+            </section>
+
+            <section name="story">
+                <title>Story</title>
+                <format>
+                    <line>**As a** {role}</line>
+                    <line>**I want** {action}</line>
+                    <line>**so that** {benefit}</line>
+                </format>
+            </section>
+
+            <section name="status">
+                <title>Status</title>
+                <options>
+                    <option>Draft</option>
+                    <option>In Progress</option>
+                    <option>Complete</option>
+                    <option>Cancelled</option>
+                </options>
+            </section>
+
+            <section name="context">
+                <title>Context</title>
+                <description>A paragraph explaining the background, current state, and why this story is needed. Include any relevant technical context or business drivers. Also any important information from previous story file if it helps drive implementation for this story</description>
+            </section>
+
+            <section name="estimation">
+                <title>Estimation</title>
+                <format>Story Points: {Story Points (1 SP = 1 day of Human Development = 2 minutes of AI development)}</format>
+            </section>
+
+            <section name="tasks">
+                <title>Tasks</title>
+                <description>Include Tests with Each Task Group, do not save until the end of all tasks flow</description>
+                <format>
+                    <task_group>
+                        <format>1. - [ ] {Major Task Group 1}</format>
+                        <subtasks>
+                            <format>   1. - [ ] {Subtask}</format>
+                        </subtasks>
+                    </task_group>
+                    <note>Use - [x] for completed items, - [-] for skipped/cancelled items</note>
+                </format>
+            </section>
+
+            <section name="constraints">
+                <title>Constraints</title>
+            </section>
+
+            <section name="data_models">
+                <title>Data Models / Schema</title>
+                <description>db schema, api request response model or schema, models or interfaces</description>
+            </section>
+
+            <section name="structure">
+                <title>Structure</title>
+                <description>module and file organization plan</description>
+            </section>
+
+            <section name="diagrams">
+                <title>Diagrams</title>
+                <description>mermaid as needed</description>
+            </section>
+
+            <section name="dev_notes">
+                <title>Dev Notes</title>
+                <format>- {any interesting commentary or things to remember as we progress through story completion}</format>
+            </section>
+
+            <section name="chat_command_log">
+                <title>Chat Command Log</title>
+                <format>- {log each command from the user in the chat thread for this story progression}</format>
+            </section>
+        </template>
+
+        <metadata>
+            <priority>high</priority>
+            <version>1.0</version>
+        </metadata>
+    </rule>
+</cursor_rules>
+

@@ -1,0 +1,149 @@
+---
+description: ALWAYS use when implementing new features, fixing bugs, or modifying existing code to ensure Test-Driven Development (TDD) practices are followed. This rule guides the development process through the red-green-refactor cycle, requiring tests to be written first, then minimal code to pass tests, followed by refactoring for best practices.
+globs: "**/*.{ts,tsx,test.ts,test.tsx,spec.ts,spec.tsx}"
+---
+<?xml version="1.0" encoding="UTF-8"?>
+<rule>
+  <metadata>
+    <n>tdd_workflow</n>
+    <description>Standards for implementing Test-Driven Development (TDD) following the red-green-refactor cycle</description>
+    <priority>high</priority>
+    <version>1.0</version>
+  </metadata>
+
+  <filters>
+    <filter>
+      <type>file_extension</type>
+      <pattern>\.(ts|tsx|test.ts|test.tsx|spec.ts|spec.tsx)$</pattern>
+    </filter>
+    <filter>
+      <type>event</type>
+      <pattern>file_create|file_modify</pattern>
+    </filter>
+  </filters>
+
+  <actions>
+    <action>
+      <type>enforce</type>
+      <guidelines>
+        <tdd_cycle>
+          <phase name="red">
+            <requirements>
+              <requirement>Write failing test(s) first before implementing any production code</requirement>
+              <requirement>Tests should clearly describe the expected behavior</requirement>
+              <requirement>Use descriptive test names following the pattern: describe('ComponentName', () => { it('should behavior when condition', () => {}) })</requirement>
+              <requirement>Include test setup, execution, and assertions</requirement>
+            </requirements>
+          </phase>
+
+          <phase name="green">
+            <requirements>
+              <requirement>Write minimal code to make tests pass</requirement>
+              <requirement>Focus on functionality, not optimization</requirement>
+              <requirement>Commit code only after all tests pass</requirement>
+              <requirement>No premature refactoring during this phase</requirement>
+            </requirements>
+          </phase>
+
+          <phase name="refactor">
+            <requirements>
+              <requirement>Improve code structure while maintaining test coverage</requirement>
+              <requirement>Apply SOLID principles and design patterns</requirement>
+              <requirement>Remove code duplication</requirement>
+              <requirement>Enhance readability and maintainability</requirement>
+              <requirement>All tests must remain green after refactoring</requirement>
+            </requirements>
+          </phase>
+        </tdd_cycle>
+
+        <test_structure>
+          <conventions>
+            <naming>
+              <test_files>*.{test,spec}.{ts,tsx}</test_files>
+              <test_suites>describe('ComponentName', ...)</test_suites>
+              <test_cases>it('should behavior when condition', ...)</test_cases>
+            </naming>
+            <organization>
+              <pattern>
+                <setup>// Arrange - Set up test data and conditions</setup>
+                <execution>// Act - Execute the code being tested</execution>
+                <verification>// Assert - Verify the results</verification>
+              </pattern>
+            </organization>
+          </conventions>
+        </test_structure>
+      </guidelines>
+    </action>
+  </actions>
+
+  <examples>
+    <example>
+      <incorrect>
+        <case type="implementation_before_tests">
+          <description>Writing implementation code before tests</description>
+          <content>
+// UserService.ts
+export class UserService {
+  async createUser(userData: UserData) {
+    // Implementation without tests
+    return await this.userRepository.save(userData);
+  }
+}
+          </content>
+        </case>
+      </incorrect>
+      <correct>
+        <case type="tdd_approach">
+          <description>Following Red-Green-Refactor cycle</description>
+          <content>
+// UserService.test.ts
+describe('UserService', () => {
+  it('should create a new user with valid data', async () => {
+    // Arrange
+    const userData = { name: 'John Doe', email: 'john@example.com' };
+    const userService = new UserService(mockUserRepository);
+
+    // Act
+    const result = await userService.createUser(userData);
+
+    // Assert
+    expect(result).toBeDefined();
+    expect(result.name).toBe(userData.name);
+    expect(mockUserRepository.save).toHaveBeenCalledWith(userData);
+  });
+});
+
+// UserService.ts (minimal implementation to make test pass)
+export class UserService {
+  constructor(private userRepository: UserRepository) {}
+
+  async createUser(userData: UserData) {
+    return await this.userRepository.save(userData);
+  }
+}
+
+// After refactoring
+export class UserService {
+  constructor(private userRepository: UserRepository) {}
+
+  async createUser(userData: UserData): Promise<User> {
+    this.validateUserData(userData);
+    const user = await this.userRepository.save(userData);
+    this.notifyUserCreated(user);
+    return user;
+  }
+
+  private validateUserData(userData: UserData): void {
+    // Validation logic
+  }
+
+  private notifyUserCreated(user: User): void {
+    // Notification logic
+  }
+}
+          </content>
+        </case>
+      </correct>
+    </example>
+  </examples>
+</rule> 

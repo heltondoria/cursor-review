@@ -1,0 +1,171 @@
+---
+description: ALWAYS use when writing or updating any documentation, code comments, or JSDoc to ensure consistent, clear, and maintainable documentation. This rule enforces Google's Technical Writing Style Guide and TypeDoc standards.
+globs: "**/*.{md,mdx,ts,tsx}"
+---
+<?xml version="1.0" encoding="UTF-8"?>
+<rule>
+  <metadata>
+    <n>documentation_standards</n>
+    <description>Standards for writing and maintaining documentation</description>
+    <priority>high</priority>
+    <version>1.0</version>
+  </metadata>
+
+  <filters>
+    <filter>
+      <type>file_extension</type>
+      <pattern>\\.(md|mdx|ts|tsx)$</pattern>
+    </filter>
+  </filters>
+
+  <actions>
+    <action>
+      <type>suggest</type>
+      <message>
+        <guidelines>
+          <general_documentation>
+            <title>General Documentation Guidelines</title>
+            <standards>
+              <standard>
+                <name>writing_style</name>
+                <description>Follow Google's Technical Writing Style Guide</description>
+              </standard>
+              <standard>
+                <name>terminology</name>
+                <description>Define terminology when needed</description>
+              </standard>
+              <standard>
+                <name>voice</name>
+                <description>Use present tense and active voice</description>
+              </standard>
+              <standard>
+                <name>clarity</name>
+                <description>Write in a clear and concise manner</description>
+              </standard>
+              <standard>
+                <name>organization</name>
+                <description>Present information in a logical order</description>
+              </standard>
+              <standard>
+                <name>formatting</name>
+                <description>Use lists and tables when appropriate</description>
+              </standard>
+              <standard>
+                <name>diagrams</name>
+                <description>Use Mermaid diagrams when appropriate</description>
+              </standard>
+            </standards>
+          </general_documentation>
+
+          <code_documentation>
+            <title>Code Documentation (JSDoc)</title>
+            <standards>
+              <standard>
+                <name>scope</name>
+                <description>Document all public functions, classes, methods, and models</description>
+                <required>true</required>
+              </standard>
+              <standard>
+                <name>tags</name>
+                <description>Use only TypeDoc compatible tags</description>
+                <required>true</required>
+                <supported_tags>
+                  <tag>@param</tag>
+                  <tag>@returns</tag>
+                  <tag>@throws</tag>
+                  <tag>@example</tag>
+                  <tag>@description</tag>
+                  <tag>@type</tag>
+                  <tag>@interface</tag>
+                  <tag>@class</tag>
+                  <tag>@method</tag>
+                </supported_tags>
+              </standard>
+              <standard>
+                <name>parameters</name>
+                <description>Include parameter descriptions</description>
+                <required>true</required>
+                <format>@param {type} name - description</format>
+              </standard>
+              <standard>
+                <name>returns</name>
+                <description>Document return types</description>
+                <required>true</required>
+                <format>@returns {type} description</format>
+              </standard>
+              <standard>
+                <name>examples</name>
+                <description>Provide usage examples for complex functions</description>
+                <required>false</required>
+                <format>@example\n * code example</format>
+              </standard>
+            </standards>
+          </code_documentation>
+
+          <documentation_structure>
+            <title>Documentation Structure</title>
+            <standards>
+              <standard>
+                <name>overview</name>
+                <description>Start with a clear purpose/overview</description>
+                <required>true</required>
+                <placement>top</placement>
+              </standard>
+              <standard>
+                <name>grouping</name>
+                <description>Group related information</description>
+                <required>true</required>
+              </standard>
+              <standard>
+                <name>formatting</name>
+                <description>Use consistent formatting</description>
+                <required>true</required>
+              </standard>
+              <standard>
+                <name>maintenance</name>
+                <description>Keep documentation up-to-date with code changes</description>
+                <required>true</required>
+              </standard>
+            </standards>
+          </documentation_structure>
+        </guidelines>
+      </message>
+    </action>
+  </actions>
+
+  <examples>
+    <example>
+      <title>Function Documentation</title>
+      <description>Example of properly documented function using JSDoc</description>
+      <bad_practice>
+        <code><![CDATA[
+// Bad
+function process(data) {
+  // does stuff
+}]]></code>
+        <explanation>Lacks proper documentation, parameter types, and return type information</explanation>
+      </bad_practice>
+      <good_practice>
+        <code><![CDATA[
+// Good
+/**
+ * Processes user data and returns normalized result
+ * @param {UserData} data - Raw user data to process
+ * @returns {NormalizedData} Normalized user data object
+ * @example
+ * const result = process({ name: "John" });
+ */
+function process(data: UserData): NormalizedData {
+  // implementation
+}]]></code>
+        <explanation>Properly documented with JSDoc comments following all standards</explanation>
+        <highlights>
+          <highlight>Clear description of function purpose</highlight>
+          <highlight>Properly typed parameters with descriptions</highlight>
+          <highlight>Return type documentation</highlight>
+          <highlight>Usage example provided</highlight>
+        </highlights>
+      </good_practice>
+    </example>
+  </examples>
+</rule> 

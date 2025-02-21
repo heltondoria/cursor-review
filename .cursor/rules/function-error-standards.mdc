@@ -1,0 +1,226 @@
+---
+description: ALWAYS use when writing or modifying functions to ensure proper error handling, type safety, and code organization. This rule enforces single responsibility, proper error handling, and TypeScript best practices.
+globs: "**/*.{ts,tsx}"
+---
+<?xml version="1.0" encoding="UTF-8"?>
+<rule>
+  <metadata>
+    <n>function_error_standards</n>
+    <description>Standards for writing functions and handling errors</description>
+    <priority>high</priority>
+    <version>1.0</version>
+  </metadata>
+
+  <filters>
+    <filter>
+      <type>file_extension</type>
+      <pattern>\\.(ts|tsx)$</pattern>
+    </filter>
+  </filters>
+
+  <actions>
+    <action>
+      <type>suggest</type>
+      <message>
+        <guidelines>
+          <function_guidelines>
+            <title>Function Guidelines</title>
+            <standards>
+              <standard>
+                <name>single_responsibility</name>
+                <description>Keep functions small and focused (single responsibility)</description>
+                <required>true</required>
+                <rationale>Functions should do one thing and do it well</rationale>
+              </standard>
+              <standard>
+                <name>naming</name>
+                <description>Use descriptive names (verb + noun)</description>
+                <required>true</required>
+                <examples>
+                  <correct>processUserData, validateInput, fetchResults</correct>
+                  <incorrect>process, doStuff, handle</incorrect>
+                </examples>
+              </standard>
+              <standard>
+                <name>arrow_functions</name>
+                <description>Prefer arrow functions for simple operations</description>
+                <required>false</required>
+                <example>const multiply = (a: number, b: number): number => a * b;</example>
+              </standard>
+              <standard>
+                <name>parameter_handling</name>
+                <description>Use default parameters and object destructuring</description>
+                <required>true</required>
+                <example>function process({ data, options = defaultOptions }: ProcessOptions) {}</example>
+              </standard>
+              <standard>
+                <name>documentation</name>
+                <description>Document with JSDoc</description>
+                <required>true</required>
+                <reference>documentation_standards</reference>
+              </standard>
+              <standard>
+                <name>nesting</name>
+                <description>Avoid nesting functions more than 2 levels deep</description>
+                <required>true</required>
+                <rationale>Maintains code readability and reduces complexity</rationale>
+              </standard>
+              <standard>
+                <name>early_return</name>
+                <description>Return early to avoid deep nesting</description>
+                <required>true</required>
+                <example>
+                  if (!isValid) return;
+                  // rest of the function
+                </example>
+              </standard>
+            </standards>
+          </function_guidelines>
+
+          <error_handling>
+            <title>Error Handling</title>
+            <standards>
+              <standard>
+                <name>typed_errors</name>
+                <description>Use typed errors with try/catch blocks</description>
+                <required>true</required>
+                <example><![CDATA[
+try {
+  await processData();
+} catch (error) {
+  if (error instanceof ValidationError) {
+    // Handle validation error
+  }
+  throw error;
+}]]></example>
+              </standard>
+              <standard>
+                <name>custom_errors</name>
+                <description>Create custom error classes for specific error types</description>
+                <required>true</required>
+                <example><![CDATA[
+class ValidationError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = 'ValidationError';
+  }
+}]]></example>
+              </standard>
+              <standard>
+                <name>error_logging</name>
+                <description>Log errors with proper context</description>
+                <required>true</required>
+                <example>logger.error('Failed to process data', { userId, error });</example>
+              </standard>
+              <standard>
+                <name>error_messages</name>
+                <description>Use meaningful error messages</description>
+                <required>true</required>
+                <examples>
+                  <correct>"Invalid user ID format: expected UUID"</correct>
+                  <incorrect>"Invalid input"</incorrect>
+                </examples>
+              </standard>
+              <standard>
+                <name>error_handling_coverage</name>
+                <description>Handle all error cases explicitly</description>
+                <required>true</required>
+                <rationale>Ensures robust error recovery and user feedback</rationale>
+              </standard>
+              <standard>
+                <name>error_propagation</name>
+                <description>Never swallow errors silently</description>
+                <required>true</required>
+                <rationale>Maintains error traceability and debugging capability</rationale>
+              </standard>
+            </standards>
+          </error_handling>
+
+          <function_parameters>
+            <title>Function Parameters</title>
+            <standards>
+              <standard>
+                <name>object_parameters</name>
+                <description>Use object parameters for functions with more than 3 parameters</description>
+                <required>true</required>
+                <example><![CDATA[
+interface ProcessOptions {
+  userId: string;
+  data: UserData;
+  options?: ProcessingOptions;
+}
+
+function processUserData({ userId, data, options = defaultOptions }: ProcessOptions): Promise<Result>]]></example>
+              </standard>
+              <standard>
+                <name>parameter_validation</name>
+                <description>Validate input parameters</description>
+                <required>true</required>
+                <example>if (!isValidUserId(userId)) throw new ValidationError('Invalid user ID');</example>
+              </standard>
+              <standard>
+                <name>type_enforcement</name>
+                <description>Use TypeScript to enforce parameter types</description>
+                <required>true</required>
+                <example>function process(data: UserData): Result {}</example>
+              </standard>
+              <standard>
+                <name>default_values</name>
+                <description>Provide default values when appropriate</description>
+                <required>false</required>
+                <example>function fetch(limit = 10, offset = 0) {}</example>
+              </standard>
+            </standards>
+          </function_parameters>
+        </guidelines>
+      </message>
+    </action>
+  </actions>
+
+  <examples>
+    <example>
+      <title>Function Implementation</title>
+      <description>Example of properly structured function with error handling</description>
+      <bad_practice>
+        <code><![CDATA[
+function process(a, b, c, d) {
+  try {
+    // ... code
+  } catch (e) {
+    console.log(e);
+  }
+}]]></code>
+        <explanation>
+          <issue>Uses positional parameters instead of object parameters</issue>
+          <issue>Swallows errors with console.log</issue>
+          <issue>No type safety</issue>
+          <issue>Non-descriptive parameter names</issue>
+        </explanation>
+      </bad_practice>
+      <good_practice>
+        <code><![CDATA[
+interface ProcessOptions {
+  userId: string;
+  data: UserData;
+  options?: ProcessingOptions;
+}
+
+function processUserData({ userId, data, options = defaultOptions }: ProcessOptions): Promise<Result> {
+  try {
+    // ... code
+  } catch (error) {
+    logger.error('Failed to process user data', { userId, error });
+    throw new ProcessingError('Failed to process user data');
+  }
+}]]></code>
+        <highlights>
+          <highlight>Uses interface for parameters</highlight>
+          <highlight>Proper error handling with context</highlight>
+          <highlight>Type safety with TypeScript</highlight>
+          <highlight>Descriptive naming</highlight>
+          <highlight>Default parameter values</highlight>
+        </highlights>
+      </good_practice>
+    </example>
+  </examples>
+</rule> 

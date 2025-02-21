@@ -1,0 +1,138 @@
+---
+description: ALWAYS use when adding new imports or managing package dependencies to ensure proper dependency management. This rule enforces package installation, type definitions, and security best practices.
+globs: "**/*.{ts,tsx,js,jsx}"
+---
+<?xml version="1.0" encoding="UTF-8"?>
+<cursor_rules>
+    <rule>
+        <n>package_management</n>
+        <description>Standards for managing package dependencies and imports</description>
+        
+        <filters>
+            <filter>
+                <type>file_extension</type>
+                <pattern>\.(ts|tsx|js|jsx)$</pattern>
+            </filter>
+            <filter>
+                <type>content</type>
+                <pattern>import.*from</pattern>
+            </filter>
+        </filters>
+
+        <guidelines>
+            <section name="package_imports">
+                <title>Package Import Requirements</title>
+                <trigger>
+                    <pattern>import.*from\s+['"](mdc:?![@./])[^'"]+['"]</pattern>
+                </trigger>
+                <requirements>
+                    <item>Verify package is listed in package.json</item>
+                    <item>Install missing packages before using them</item>
+                    <item>Include TypeScript types for TypeScript projects</item>
+                    <item>Specify version constraints</item>
+                </requirements>
+                <actions>
+                    <item>For new packages: `npm install package-name @types/package-name`</item>
+                    <item>For existing packages: verify in package.json</item>
+                    <item>Document version requirements</item>
+                    <item>Add to both dependencies and devDependencies as appropriate</item>
+                </actions>
+            </section>
+
+            <section name="typescript_types">
+                <title>TypeScript Types Requirements</title>
+                <trigger>
+                    <pattern>import.*from\s+['"]@types/</pattern>
+                </trigger>
+                <requirements>
+                    <item>Install both package and its types</item>
+                    <item>Add types to devDependencies</item>
+                    <item>Verify TypeScript configuration</item>
+                </requirements>
+            </section>
+
+            <section name="implementation_guide">
+                <title>Implementation Guide</title>
+                
+                <subsection name="new_imports">
+                    <title>Before Adding New Imports</title>
+                    <guidelines>
+                        <item>Check package.json for existing dependency</item>
+                        <item>Install missing packages with npm/yarn</item>
+                        <item>Include TypeScript types if needed</item>
+                        <item>Document version requirements</item>
+                    </guidelines>
+                </subsection>
+
+                <subsection name="version_management">
+                    <title>Version Management</title>
+                    <guidelines>
+                        <item>Use exact versions or appropriate version ranges</item>
+                        <item>Document breaking changes</item>
+                        <item>Keep dependencies up to date</item>
+                    </guidelines>
+                </subsection>
+
+                <subsection name="typescript_integration">
+                    <title>TypeScript Integration</title>
+                    <guidelines>
+                        <item>Always include @types packages for TypeScript</item>
+                        <item>Add types to devDependencies</item>
+                        <item>Verify TypeScript configuration</item>
+                    </guidelines>
+                </subsection>
+
+                <subsection name="security">
+                    <title>Security</title>
+                    <guidelines>
+                        <item>Review package security before installation</item>
+                        <item>Use trusted packages</item>
+                        <item>Keep dependencies updated for security patches</item>
+                    </guidelines>
+                </subsection>
+
+                <subsection name="documentation">
+                    <title>Documentation</title>
+                    <guidelines>
+                        <item>Document package purpose in code</item>
+                        <item>Include version requirements</item>
+                    </guidelines>
+                </subsection>
+            </section>
+        </guidelines>
+
+        <examples>
+            <example name="uuid_import">
+                <title>UUID Package Import</title>
+                <before>
+                    <code>// Before adding this import
+                    import { v4 as uuidv4 } from 'uuid';</code>
+                </before>
+                <after>
+                    <code>// First ensure package is installed
+                    // npm install uuid @types/uuid
+                    import { v4 as uuidv4 } from 'uuid';</code>
+                </after>
+            </example>
+
+            <example name="axios_import">
+                <title>Axios Package Import</title>
+                <before>
+                    <code>// Before adding this import
+                    import axios from 'axios';</code>
+                </before>
+                <after>
+                    <code>// First ensure package is installed
+                    // npm install axios
+                    import axios from 'axios';</code>
+                </after>
+            </example>
+        </examples>
+
+        <metadata>
+            <priority>high</priority>
+            <version>1.0</version>
+        </metadata>
+    </rule>
+</cursor_rules>
+ 

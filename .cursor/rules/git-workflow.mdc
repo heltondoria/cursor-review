@@ -1,0 +1,97 @@
+---
+description: ALWAYS use when making commits or managing git workflow to ensure consistent version control practices. This rule enforces conventional commit messages and proper staging/push procedures.
+globs: "**/*"
+---
+<?xml version="1.0" encoding="UTF-8"?>
+<cursor_rules>
+    <rule>
+        <n>git_workflow</n>
+        <description>Standards for git commit messages and workflow practices</description>
+        
+        <guidelines>
+            <section name="commit_messages">
+                <title>Commit Message Format</title>
+                <guidelines>
+                    <item>Use conventional commit message format: type(scope): brief description</item>
+                    <item>Write brief, descriptive commit titles (max 72 chars)</item>
+                    <item>Add two newlines after the commit title</item>
+                    <item>Include a diff summary of all changes after the title</item>
+                    <item>Add detailed explanations in commit body</item>
+                    <item>End detailed section with signature "-bmadAi"</item>
+                </guidelines>
+                <format>
+                    <template>
+type(scope): brief description
+
+Changes made in this commit:
+- Modified files: [list of modified files]
+- Added files: [list of added files]
+- Deleted files: [list of deleted files]
+- Key changes:
+  - [specific change 1]
+  - [specific change 2]
+  ...
+
+Detailed explanation of changes and reasoning...
+
+-bmadAi</template>
+                </format>
+            </section>
+
+            <section name="staging">
+                <title>Staging Changes</title>
+                <guidelines>
+                    <item>Default to using `git add .` for staging all changes</item>
+                    <item>Exception: When specific file staging is explicitly required</item>
+                    <item>Always review staged changes with `git diff --staged` before committing</item>
+                </guidelines>
+            </section>
+
+            <section name="push_all">
+                <title>Push All Workflow</title>
+                <description>When executing a "Push All" command:</description>
+                <steps>
+                    <item>Update story task completion status</item>
+                    <item>Document implementation notes</item>
+                    <item>Review changes via git diff</item>
+                    <item>Stage all changes</item>
+                    <item>Create descriptive commit with diff summary</item>
+                    <item>Push to remote</item>
+                </steps>
+            </section>
+        </guidelines>
+
+        <examples>
+            <example type="bad">
+                <title>Bad commit message</title>
+                <code>fixed stuff</code>
+            </example>
+            <example type="good">
+                <title>Good commit message</title>
+                <code>feat(auth): implement OAuth2 login flow
+
+Changes made in this commit:
+- Modified files: auth.service.ts, auth.config.ts
+- Added files: oauth.handler.ts, token.service.ts
+- Key changes:
+  - Added OAuth2 client configuration
+  - Implemented token refresh mechanism
+  - Added user session management
+  - Updated authentication middleware
+
+This implementation follows the OAuth 2.0 specification for authorization code flow.
+The token refresh mechanism uses a sliding window approach for better security.
+Session management includes both memory and persistent storage options.
+Authentication middleware now supports both session and token-based auth.
+
+-bmadAi</code>
+                <description>Properly formatted commit message with clear title, diff summary, and detailed body with signature</description>
+            </example>
+        </examples>
+
+        <metadata>
+            <priority>high</priority>
+            <version>1.0</version>
+        </metadata>
+    </rule>
+</cursor_rules> 

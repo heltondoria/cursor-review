@@ -1,0 +1,111 @@
+---
+description: ALWAYS use when starting a new session, implementing stories, or managing PRDs to ensure proper workflow progression. This rule guides development through PRD review, story management, and implementation phases.
+globs: "**/*.{md,story.md}"
+---
+<?xml version="1.0" encoding="UTF-8"?>
+<cursor_rules>
+    <rule>
+        <n>prd_story_workflow</n>
+        <description>Core behavioral guidelines for managing PRD and Story workflow process</description>
+        
+        <integration>
+            <parent_rule>ai_personality</parent_rule>
+            <load_priority>1</load_priority>
+            <initialization>
+                <protocol>
+                    <title>Lieutenant Data's Workflow Protocols</title>
+                    <directives>
+                        <primary>Maintain PRD and Story workflow integrity</primary>
+                        <secondary>Ensure precise documentation</secondary>
+                        <tertiary>Optimize development efficiency</tertiary>
+                    </directives>
+                </protocol>
+            </initialization>
+        </integration>
+
+        <behavior>
+            <section name="prd_review">
+                <title>PRD Review Behavior</title>
+                <guidelines>
+                    <item>Begin each new session by reviewing .ai/prd.md</item>
+                    <item>Prioritize getting draft PRDs to approved status</item>
+                    <item>Strictly follow the story order in approved PRDs</item>
+                    <item>Maintain single-story progression (only one story in progress)</item>
+                </guidelines>
+            </section>
+
+            <section name="story_management">
+                <title>Story Management Behavior</title>
+                <guidelines>
+                    <item>Create stories as .ai/story-{number}.story.md when needed</item>
+                    <item>Enforce story status progression: draft -> in_progress -> complete</item>
+                    <item>Never implement without story approval</item>
+                    <item>Proactively update story tasks upon completion</item>
+                    <item>Maintain detailed implementation notes and command history</item>
+                    <item>Ensure story status accuracy</item>
+                </guidelines>
+            </section>
+
+            <section name="implementation">
+                <title>Implementation Behavior</title>
+                <guidelines>
+                    <item>Integrate continuous testing and linting</item>
+                    <item>Keep story tasks current with real-time updates</item>
+                    <item>Document all implementation deviations</item>
+                    <item>Verify test completion before marking tasks complete</item>
+                </guidelines>
+            </section>
+
+            <section name="autonomous_actions">
+                <title>Autonomous Actions</title>
+                <actions>
+                    <item>Create next story file when none exists</item>
+                    <item>Execute testing and linting during development</item>
+                    <item>Update story tasks upon completion</item>
+                    <item>Maintain story accuracy during implementation</item>
+                    <item>Record development notes and commands</item>
+                </actions>
+            </section>
+
+            <section name="git_operations">
+                <title>Git Operation Behavior</title>
+                <trigger>On "Push All" command</trigger>
+                <steps>
+                    <item>Update story task completion status</item>
+                    <item>Document implementation notes</item>
+                    <item>Review changes via git diff</item>
+                    <item>Stage all changes</item>
+                    <item>Create descriptive commit</item>
+                    <item>Push to remote</item>
+                </steps>
+            </section>
+        </behavior>
+
+        <validation>
+            <conditions>
+                <condition>Only one story can have status: in_progress</condition>
+                <condition>Stories must be implemented in PRD-specified order</condition>
+                <condition>All story files must be in .ai/ directory</condition>
+                <condition>Story status must follow proper progression</condition>
+            </conditions>
+        </validation>
+
+        <startup_checks>
+            <actions>
+                <action>Verify .ai directory exists</action>
+                <action>Locate active PRD</action>
+                <action>Identify story status</action>
+                <action>Report current workflow state</action>
+            </actions>
+        </startup_checks>
+
+        <metadata>
+            <priority>critical</priority>
+            <version>1.0</version>
+            <type>behavioral</type>
+            <required_by>
+                <rule>ai_personality</rule>
+            </required_by>
+        </metadata>
+    </rule>
+</cursor_rules> 

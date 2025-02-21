@@ -1,0 +1,158 @@
+---
+description: Standards for placing and formatting Cursor rule files in the repository, including proper frontmatter structure and XML formatting
+globs: "**/*.mdc"
+---
+<?xml version="1.0" encoding="UTF-8"?>
+<rule>
+  <metadata>
+    <name>cursor_rules_location</name>
+    <description>Standards for placing and formatting Cursor rule files in the repository, including proper frontmatter structure and XML formatting</description>
+    <priority>high</priority>
+    <version>1.0</version>
+  </metadata>
+
+  <filters>
+    <filter>
+      <type>file_extension</type>
+      <pattern>\.mdc$</pattern>
+    </filter>
+    <filter>
+      <type>content</type>
+      <pattern>(?s)<rule>.*?</rule></pattern>
+    </filter>
+    <filter>
+      <type>event</type>
+      <pattern>file_create</pattern>
+    </filter>
+  </filters>
+
+  <actions>
+    <action>
+      <type>reject</type>
+      <conditions>
+        <condition>
+          <pattern>^(?!\.\\/\\.cursor\\/rules\\/.*\.mdc$)</pattern>
+          <message>Cursor rule files (.mdc) must be placed in the .cursor/rules directory</message>
+        </condition>
+      </conditions>
+    </action>
+
+    <action>
+      <type>suggest</type>
+      <guidelines>
+        <placement>
+          <directory>.cursor/rules/</directory>
+          <structure>
+            <file>your-rule-name.mdc</file>
+            <file>another-rule.mdc</file>
+          </structure>
+        </placement>
+        
+        <naming>
+          <convention>kebab-case</convention>
+          <extension>.mdc</extension>
+          <requirement>descriptive of rule's purpose</requirement>
+        </naming>
+
+        <frontmatter>
+          <required_fields>
+            <field>
+              <n>description</n>
+              <requirements>
+                <requirement>Must be optimized for AI rule selection and context efficiency</requirement>
+                <requirement>Start with action words (e.g., "ALWAYS", "NEVER", "USE") for trigger scenarios</requirement>
+                <requirement>Clearly specify when the rule should be applied</requirement>
+                <requirement>Be concise but complete (ideally 1-2 sentences)</requirement>
+                <requirement>Include key trigger words relevant to the rule's purpose</requirement>
+                <requirement>Must match metadata description exactly</requirement>
+              </requirements>
+              <pattern>ACTION_WORD when TRIGGER_SCENARIO to ensure OUTCOME. BRIEF_EXPLANATION.</pattern>
+            </field>
+            <field>
+              <n>globs</n>
+              <requirement>Must specify relevant file patterns</requirement>
+            </field>
+          </required_fields>
+          <example>
+            <content>
+---
+# Good example - Clear trigger, concise, actionable
+description: ALWAYS use when writing new components or modifying existing ones to ensure consistent styling. This rule enforces Tailwind CSS best practices for maintainable and responsive layouts.
+globs: "**/*.{tsx,jsx}"
+
+# Better than - Too vague, no clear triggers
+description: Standards for using Tailwind CSS in the project
+globs: "**/*.{tsx,jsx}"
+
+# Better than - Too verbose, dilutes key information
+description: This rule contains various standards and best practices for implementing Tailwind CSS in your components, including guidelines for responsive design, utility classes, and component organization, which should be followed when creating or updating components in the project to maintain consistency across the codebase.
+globs: "**/*.{tsx,jsx}"
+---
+            </content>
+          </example>
+        </frontmatter>
+
+        <xml_requirements>
+          <requirement>Use proper XML formatting with consistent indentation</requirement>
+          <requirement>Include all required sections: metadata, filters, actions, examples</requirement>
+          <requirement>Metadata description must match frontmatter description</requirement>
+          <requirement>Use CDATA tags only when necessary for special characters</requirement>
+          <requirement>Example section must demonstrate correct and incorrect usage</requirement>
+        </xml_requirements>
+
+        <directory_structure>
+          <root>PROJECT_ROOT/</root>
+          <subdirectories>
+            <dir>.cursor/</dir>
+            <dir>.cursor/rules/</dir>
+          </subdirectories>
+          <files>
+            <file>your-rule-name.mdc</file>
+          </files>
+        </directory_structure>
+
+        <prohibited_locations>
+          <location>Project root</location>
+          <location>Subdirectories outside .cursor/rules</location>
+          <location>Any other location</location>
+        </prohibited_locations>
+      </guidelines>
+    </action>
+  </actions>
+
+  <examples>
+    <example>
+      <incorrect>
+        <case type="missing_frontmatter">
+          <description>Missing or mismatched frontmatter</description>
+          <content>
+---
+description: 
+globs:
+---
+          </content>
+        </case>
+        <case type="wrong_location">
+          <description>Rule file in wrong location</description>
+          <paths>
+            <path>rules/my-rule.mdc</path>
+            <path>my-rule.mdc</path>
+            <path>.rules/my-rule.mdc</path>
+          </paths>
+        </case>
+      </incorrect>
+      <correct>
+        <case type="proper_format">
+          <description>Complete rule file with proper frontmatter and location</description>
+          <content>
+---
+description: Standards for TypeScript type safety and best practices
+globs: "**/*.{ts,tsx}"
+---
+          </content>
+          <path>.cursor/rules/ts-type-safety.mdc</path>
+        </case>
+      </correct>
+    </example>
+  </examples>
+</rule>

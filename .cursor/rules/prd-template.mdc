@@ -1,0 +1,111 @@
+---
+description: ALWAYS use when creating a new PRD or modifying an existing one to ensure consistent structure and completeness. This rule enforces standardized PRD format with all required sections and proper documentation hierarchy.
+globs: "**/*.{md,prd.md}"
+---
+<?xml version="1.0" encoding="UTF-8"?>
+<cursor_rules>
+    <rule>
+        <n>prd_template</n>
+        <description>Template for creating and updating Product Requirements Documents</description>
+        
+        <filters>
+            <filter>
+                <type>file_pattern</type>
+                <pattern>\.ai/prd\.md$</pattern>
+            </filter>
+        </filters>
+
+        <template>
+            <section name="header">
+                <title>Product Requirements Document (PRD) for {project-name}</title>
+            </section>
+
+            <section name="status">
+                <title>Status</title>
+                <options>
+                    <option>Draft</option>
+                    <option>Approved</option>
+                </options>
+                <default>Draft</default>
+            </section>
+
+            <section name="introduction">
+                <title>1. Introduction</title>
+                <description>The {project-name} description</description>
+            </section>
+
+            <section name="goals">
+                <title>2. Goals</title>
+                <description>What are the goals of the project?</description>
+            </section>
+
+            <section name="story_list">
+                <title>3. Story List</title>
+                <description>
+                    Granular Steps and milestones for the project - the AI will create stories with much greater granularity than this to implement each one, but ensure here you have a list of all the stories you want to implement in a way that is easy to understand and follow. You will learn over time the proper level of detail here and the breakdown in the stories as you work with the AI a few times.
+                </description>
+                <format>Story-{N}: {Description of story/task}</format>
+            </section>
+
+            <section name="tech_stack">
+                <title>4. Tech Stack</title>
+                <description>Sample tech stack for a nodejs TS api project - keep it blank if you are going to iterate on the tech stack from scratch</description>
+                <example>
+                    <stack_group name="Backend">
+                        <item>Node.js 22</item>
+                        <item>TypeScript</item>
+                        <item>AWS SDK V3</item>
+                    </stack_group>
+                    <stack_group name="Testing">
+                        <item>Jest (Unit Testing)</item>
+                        <item>Playwright (End-to-End Testing)</item>
+                    </stack_group>
+                    <stack_group name="AI &amp; Email Services">
+                        <item>Deepseek (deepseek-chat or r1) for local &amp; remote LLM</item>
+                        <item>Nodemailer (Gmail SMTP)</item>
+                    </stack_group>
+                    <stack_group name="Web Scraping &amp; Extraction">
+                        <item>axios (HTTP requests)</item>
+                        <item>jsdom &amp; @mozilla/readability (Static HTML parsing)</item>
+                        <item>Puppeteer or Playwright (Dynamic content extraction)</item>
+                    </stack_group>
+                    <stack_group name="AWS Services (Free Tier)">
+                        <item>API Gateway (API Management)</item>
+                        <item>CDK (Infrastructure-as-Code)</item>
+                        <item>Lambda (Function Execution)</item>
+                        <item>CloudWatch (Logging &amp; Monitoring)</item>
+                        <item>SES (Email Service)</item>
+                        <item>DynamoDB (Database)</item>
+                        <item>S3 (Storage)</item>
+                        <item>Route 53 (DNS)</item>
+                        <item>CloudFront (CDN)</item>
+                        <item>Cognito (Authentication)</item>
+                    </stack_group>
+                </example>
+            </section>
+
+            <section name="technical_details">
+                <title>5. Technical Details</title>
+                <description>Potential technical details can include:</description>
+                <items>
+                    <item>Architecture Diagrams - AI is great at generating and also using these to implement stories</item>
+                    <item>Project folder structure - very useful for AI to put stuff where you want it</item>
+                    <item>Database schema's</item>
+                    <item>Deployment guidance</item>
+                    <item>Error handling strategies</item>
+                    <item>Performance considerations and constraints</item>
+                </items>
+            </section>
+
+            <section name="future_enhancements">
+                <title>6. Future Enhancements (Beyond this PRD)</title>
+                <description>{Future enhancements beyond the scope of this PRD, great area to collect ideas now or as the stories progress}</description>
+            </section>
+        </template>
+
+        <metadata>
+            <priority>high</priority>
+            <version>1.0</version>
+        </metadata>
+    </rule>
+</cursor_rules>

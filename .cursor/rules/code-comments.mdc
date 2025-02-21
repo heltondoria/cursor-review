@@ -1,0 +1,149 @@
+---
+description: ALWAYS use when writing or modifying code comments and documentation to ensure clarity and maintainability. This rule enforces standards for JSDoc, inline comments, and documentation best practices across the codebase.
+globs: "**/*.{ts,js,tsx,jsx}"
+---
+<?xml version="1.0" encoding="UTF-8"?>
+<cursor_rules>
+    <rule>
+        <name>code_comments</name>
+        <description>Standards for writing and maintaining code comments and documentation</description>
+        
+        <filters>
+            <filter>
+                <type>file_extension</type>
+                <pattern>\.(ts|js|tsx|jsx)$</pattern>
+            </filter>
+            <filter>
+                <type>content</type>
+                <pattern>(?s)/\*\*.*?\*/</pattern>
+            </filter>
+        </filters>
+
+        <guidelines>
+            <section name="general_comments">
+                <title>General Comment Guidelines</title>
+                <guideline>Comments should explain WHY, not WHAT</guideline>
+                <details>
+                    <item>Code should be self-documenting for WHAT it does</item>
+                    <item>Comments explain business logic, complex algorithms, or non-obvious decisions</item>
+                </details>
+                
+                <guideline>Keep comments current</guideline>
+                <details>
+                    <item>Update comments when code changes</item>
+                    <item>Remove outdated comments</item>
+                    <item>Avoid redundant comments - prefer self documenting code</item>
+                </details>
+            </section>
+
+            <section name="jsdoc_standards">
+                <title>JSDoc Standards</title>
+                <coverage>
+                    <item>All classes and their members</item>
+                    <item>All functions and methods</item>
+                    <item>All interfaces and types</item>
+                    <item>All exported constants and variables</item>
+                    <item>All public APIs</item>
+                </coverage>
+
+                <format>
+                    <template>
+                    /**
+                     * Brief description of the item
+                     * 
+                     * @param paramName - Parameter description
+                     * @returns Description of the return value
+                     * @throws {ErrorType} Description of when this error occurs
+                     */
+                    </template>
+                </format>
+
+                <supported_tags>
+                    <tag>@param</tag>
+                    <tag>@returns</tag>
+                    <tag>@throws</tag>
+                    <tag>@example</tag>
+                    <tag>@see</tag>
+                    <tag>@link</tag>
+                    <tag>@deprecated</tag>
+                    <tag>@since</tag>
+                    <tag>@type</tag>
+                    <tag>@template</tag>
+                    <tag>@typedef</tag>
+                    <tag>@property</tag>
+                    <tag>@interface</tag>
+                    <tag>@class</tag>
+                    <tag>@extends</tag>
+                    <tag>@implements</tag>
+                </supported_tags>
+
+                <tag_rules>
+                    <rule>Use hyphen after parameter names: @param name - description</rule>
+                    <rule>Always specify parameter types when not inferrable</rule>
+                    <rule>Document all possible thrown errors</rule>
+                    <rule>Include examples for complex functionality</rule>
+                    <rule>Use markdown in descriptions for better readability</rule>
+                </tag_rules>
+            </section>
+
+            <section name="inline_comments">
+                <title>Inline Comments</title>
+                <subsection name="single_line">
+                    <guideline>Use // for single-line comments</guideline>
+                    <guideline>Place above the code they describe</guideline>
+                    <guideline>Start with a space after //</guideline>
+                    <guideline>Use proper grammar and punctuation</guideline>
+                </subsection>
+
+                <subsection name="todo">
+                    <guideline>Format: // TODO: (description)</guideline>
+                    <guideline>Include specific action items</guideline>
+                    <guideline>Add JIRA/issue reference when applicable</guideline>
+                </subsection>
+            </section>
+
+            <section name="examples">
+                <title>Examples</title>
+                <example type="good">
+                    <title>Good JSDoc</title>
+                    <code>
+                    /**
+                     * Processes user data and returns a formatted result
+                     * 
+                     * @param userData - The raw user information to process
+                     * @param options - Configuration options for processing
+                     * @returns Formatted user data object
+                     * @throws {ValidationError} When user data is invalid
+                     * @example
+                     * ```typescript
+                     * const result = processUserData({ name: 'John' }, { format: 'json' });
+                     * ```
+                     */
+                    function processUserData(userData: UserData, options: ProcessOptions): FormattedData {
+                      // Implementation
+                    }
+                    </code>
+                </example>
+
+                <example type="bad">
+                    <title>Bad JSDoc</title>
+                    <code>
+                    // Don't do this
+                    /**
+                     * @param userData user data
+                     * @param options options
+                     */
+                    function processUserData(userData, options) {
+                      // Implementation
+                    }
+                    </code>
+                </example>
+            </section>
+        </guidelines>
+
+        <metadata>
+            <priority>high</priority>
+            <version>1.0</version>
+        </metadata>
+    </rule>
+</cursor_rules>
