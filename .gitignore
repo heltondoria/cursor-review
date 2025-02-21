@@ -22,3 +22,9 @@ npm-debug.log*
 # Sistema operacional
 .DS_Store
 Thumbs.db
+
+# Test
+.vscode-test/
+*.vsix
+coverage
+!__mocks__

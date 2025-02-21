@@ -1,0 +1,128 @@
+---
+description: ALWAYS follow this systematic process when analyzing errors to ensure thorough problem resolution. This rule enforces a structured approach for error investigation, root cause analysis, and solution evaluation.
+globs: "**/*.{ts,tsx,js,jsx}"
+---
+
+<?xml version="1.0" encoding="UTF-8"?>
+<rule>
+  <metadata>
+    <name>error_analysis_process</name>
+    <description>Standards for systematic error analysis and resolution in the codebase</description>
+    <priority>high</priority>
+    <version>1.0</version>
+  </metadata>
+
+  <process>
+    <step name="context_analysis">
+      <requirements>
+        <requirement>Review all relevant files and dependencies</requirement>
+        <requirement>Understand system architecture and patterns</requirement>
+        <requirement>Check project documentation (PRD, Stories)</requirement>
+        <requirement>Identify related components and interfaces</requirement>
+      </requirements>
+    </step>
+
+    <step name="error_assessment">
+      <requirements>
+        <requirement>Collect all error messages and stack traces</requirement>
+        <requirement>Identify affected files and line numbers</requirement>
+        <requirement>Map dependencies between errors</requirement>
+        <requirement>Classify by severity and impact</requirement>
+      </requirements>
+    </step>
+
+    <step name="root_cause_analysis">
+      <method>
+        <pattern>Effect -> Immediate Cause -> Intermediate Cause -> Root Cause</pattern>
+        <actions>
+          <action>Create cause-effect tree</action>
+          <action>Test each hypothesis</action>
+          <action>Document findings</action>
+          <action>Identify patterns</action>
+        </actions>
+      </method>
+    </step>
+
+    <step name="solution_generation">
+      <criteria>
+        <criterion>Impact on dependencies</criterion>
+        <criterion>Implementation complexity</criterion>
+        <criterion>Potential risks</criterion>
+        <criterion>Maintainability</criterion>
+        <criterion>Type safety</criterion>
+        <criterion>Testing requirements</criterion>
+      </criteria>
+    </step>
+
+    <step name="solution_evaluation">
+      <aspects>
+        <aspect>Project patterns compliance</aspect>
+        <aspect>Scalability</aspect>
+        <aspect>Performance impact</aspect>
+        <aspect>Type safety guarantees</aspect>
+        <aspect>Testing coverage</aspect>
+        <aspect>Maintenance overhead</aspect>
+      </aspects>
+    </step>
+
+    <step name="final_recommendation">
+      <requirements>
+        <requirement>Select best cost/benefit solution</requirement>
+        <requirement>Provide implementation details</requirement>
+        <requirement>Document potential future impacts</requirement>
+        <requirement>Include test cases</requirement>
+      </requirements>
+    </step>
+  </process>
+
+  <examples>
+    <example>
+      <incorrect>
+        <approach>
+          <description>Direct fix without analysis</description>
+          <code>
+            // Immediately changing code without understanding context
+            interface Tool { 
+              execute: any; // Quick fix to remove type error
+            }
+          </code>
+        </approach>
+      </incorrect>
+
+      <correct>
+        <approach>
+          <description>Systematic analysis leading to proper solution</description>
+          <steps>
+            <step>
+              <context>
+                "Type constraint error in MCP Tool interface"
+                - Part of VS Code extension
+                - Uses MCP protocol
+                - TypeScript project
+              </context>
+              <analysis>
+                Error: Type 'ReviewParams' doesn't satisfy 'Record<string, unknown>'
+                Cause: Missing index signature implementation
+                Root: SDK type requirements not properly implemented
+              </analysis>
+              <solution>
+                <code>
+                  interface ReviewParams extends Record<string, unknown> {
+                    diff: string;
+                    context?: string;
+                  }
+                </code>
+                <justification>
+                  - Maintains type safety
+                  - Follows SDK requirements
+                  - Simple to implement
+                  - Easy to maintain
+                </justification>
+              </solution>
+            </step>
+          </steps>
+        </approach>
+      </correct>
+    </example>
+  </examples>
+</rule> 
