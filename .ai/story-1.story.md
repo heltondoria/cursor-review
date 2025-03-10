@@ -136,4 +136,4 @@ graph TD
 - Implementação das interfaces e gerenciadores de recursos, ferramentas e prompts
 - Implementação do transporte stdio
 - Instalação do JDK 21 para compilação do projeto
-- Compilação bem-sucedida do projeto 
+- Compilação bem-sucedida do projeto

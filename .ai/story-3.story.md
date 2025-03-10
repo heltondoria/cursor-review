@@ -121,7 +121,7 @@ public enum DiffType {
 
 ## Structure
 
-```
+```code
 com.codereview.mcp
 ├── ...
 ├── git
@@ -188,4 +188,4 @@ sequenceDiagram
 
 ## Chat Command Log
 
-- 
+-

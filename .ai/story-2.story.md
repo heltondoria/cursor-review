@@ -109,7 +109,7 @@ public class ChunkingStrategy {
 
 ## Structure
 
-```
+```code
 com.codereview.mcp
 ├── ...
 ├── review
@@ -179,4 +179,4 @@ sequenceDiagram
 
 ## Chat Command Log
 
-- 
+-

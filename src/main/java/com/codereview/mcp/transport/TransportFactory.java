@@ -1,7 +1,6 @@
 package com.codereview.mcp.transport;
 
 import com.codereview.mcp.config.McpServerConfig;
-import com.codereview.mcp.config.TransportType;
 import com.codereview.mcp.transport.stdio.StdioTransport;
 import lombok.extern.slf4j.Slf4j;
 
