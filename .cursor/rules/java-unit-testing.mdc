@@ -1,0 +1,728 @@
+---
+description: ALWAYS use when writing or modifying unit tests to ensure comprehensive test coverage. This rule enforces test structure, proper assertions, and thorough edge case testing in Java with JUnit for Spring Boot and Quarkus applications.
+globs: **/*.{java,kt}
+alwaysApply: false
+---
+---
+metadata:
+  name: java_unit_testing
+  description: ALWAYS use when writing or modifying unit tests to ensure comprehensive test coverage. This rule enforces test structure, proper assertions, and thorough edge case testing in Java with JUnit for Spring Boot and Quarkus applications.
+  priority: high
+  version: 1.0
+
+filters:
+  - type: file_extension
+    pattern: \.(java|kt)$
+  - type: content
+    pattern: @Test|@SpringBootTest|@QuarkusTest
+
+guidelines:
+  test_structure:
+    title: Estrutura de Testes
+    
+    naming_conventions:
+      title: Convenções de Nomenclatura
+      rules:
+        - Classes de teste devem terminar com "Test" (ex. UserServiceTest)
+        - Métodos de teste devem ser descritivos e seguir o padrão "should[ExpectedBehavior]When[StateUnderTest]"
+        - Use nomes que descrevam o comportamento esperado, não a implementação
+      examples:
+        correct:
+          - "shouldReturnUserWhenValidIdProvided()"
+          - "shouldThrowExceptionWhenUserNotFound()"
+        incorrect:
+          - "testGetUser()"
+          - "userServiceTest()"
+    
+    organization:
+      title: Organização de Testes
+      rules:
+        - Siga o padrão AAA (Arrange, Act, Assert)
+        - Agrupe testes relacionados em classes de teste separadas
+        - Use @Nested para agrupar testes relacionados dentro de uma classe
+        - Mantenha a estrutura de pacotes de teste espelhando a estrutura do código principal
+      example: |
+        @DisplayName("UserService Tests")
+        class UserServiceTest {
+            
+            @Nested
+            @DisplayName("User retrieval operations")
+            class UserRetrievalTests {
+                @Test
+                @DisplayName("Should return user when valid ID provided")
+                void shouldReturnUserWhenValidIdProvided() {
+                    // Arrange
+                    Long userId = 1L;
+                    User expectedUser = new User(userId, "John");
+                    when(userRepository.findById(userId)).thenReturn(Optional.of(expectedUser));
+                    
+                    // Act
+                    User result = userService.getUserById(userId);
+                    
+                    // Assert
+                    assertThat(result).isNotNull();
+                    assertThat(result.getId()).isEqualTo(userId);
+                }
+            }
+            
+            @Nested
+            @DisplayName("User creation operations")
+            class UserCreationTests {
+                // Testes para criação de usuários
+            }
+        }
+    
+    lifecycle_methods:
+      title: Métodos de Ciclo de Vida
+      rules:
+        - Use @BeforeEach para configuração comum a todos os testes
+        - Use @BeforeAll para configuração única antes de todos os testes
+        - Use @AfterEach para limpeza após cada teste
+        - Use @AfterAll para limpeza após todos os testes
+      example: |
+        class UserServiceTest {
+            private UserRepository userRepository;
+            private UserService userService;
+            
+            @BeforeEach
+            void setUp() {
+                userRepository = mock(UserRepository.class);
+                userService = new UserService(userRepository);
+            }
+            
+            @AfterEach
+            void tearDown() {
+                // Limpar recursos, se necessário
+            }
+            
+            // Testes
+        }
+  
+  assertion_practices:
+    title: Práticas de Asserção
+    
+    assertion_libraries:
+      title: Bibliotecas de Asserção
+      rules:
+        - Prefira AssertJ para asserções fluentes e legíveis
+        - Use asserções específicas em vez de asserções genéricas
+        - Inclua mensagens descritivas em asserções complexas
+      examples:
+        assertj: |
+          // AssertJ - fluente e legível
+          assertThat(user.getName()).isEqualTo("John");
+          assertThat(users).hasSize(3)
+                          .extracting(User::getRole)
+                          .contains(Role.ADMIN, Role.USER);
+        junit: |
+          // JUnit Jupiter assertions
+          assertEquals("John", user.getName(), "User name should be John");
+          assertTrue(users.size() == 3, "Should have 3 users");
+    
+    exception_testing:
+      title: Teste de Exceções
+      rules:
+        - Teste explicitamente comportamentos de exceção
+        - Verifique a mensagem e o tipo da exceção
+        - Use assertThrows para testar exceções
+      example: |
+        @Test
+        void shouldThrowExceptionWhenUserNotFound() {
+            // Arrange
+            Long userId = 999L;
+            when(userRepository.findById(userId)).thenReturn(Optional.empty());
+            
+            // Act & Assert
+            ResourceNotFoundException exception = assertThrows(
+                ResourceNotFoundException.class,
+                () -> userService.getUserById(userId)
+            );
+            
+            assertThat(exception.getMessage()).contains("User not found");
+            assertThat(exception.getResourceId()).isEqualTo(userId.toString());
+        }
+  
+  spring_boot_testing:
+    title: Testes em Spring Boot
+    
+    test_slices:
+      title: Slices de Teste
+      rules:
+        - Use @WebMvcTest para testar controllers isoladamente
+        - Use @DataJpaTest para testar repositórios
+        - Use @JsonTest para testar serialização/deserialização JSON
+        - Use @SpringBootTest para testes de integração
+      examples:
+        controller_test: |
+          @WebMvcTest(UserController.class)
+          class UserControllerTest {
+              @Autowired
+              private MockMvc mockMvc;
+              
+              @MockBean
+              private UserService userService;
+              
+              @Test
+              void shouldReturnUserWhenGetUserById() throws Exception {
+                  // Arrange
+                  User user = new User(1L, "John");
+                  when(userService.getUserById(1L)).thenReturn(user);
+                  
+                  // Act & Assert
+                  mockMvc.perform(get("/api/users/1"))
+                      .andExpect(status().isOk())
+                      .andExpect(jsonPath("$.id").value(1))
+                      .andExpect(jsonPath("$.name").value("John"));
+              }
+          }
+        repository_test: |
+          @DataJpaTest
+          class UserRepositoryTest {
+              @Autowired
+              private UserRepository userRepository;
+              
+              @Test
+              void shouldFindUserByEmail() {
+                  // Arrange
+                  User user = new User(null, "John", "john@example.com");
+                  userRepository.save(user);
+                  
+                  // Act
+                  User found = userRepository.findByEmail("john@example.com").orElse(null);
+                  
+                  // Assert
+                  assertThat(found).isNotNull();
+                  assertThat(found.getName()).isEqualTo("John");
+              }
+          }
+    
+    mocking:
+      title: Mocking em Spring
+      rules:
+        - Use @MockBean para mockar beans do Spring
+        - Use @SpyBean para espionar beans reais
+        - Considere usar TestConfiguration para configurações específicas de teste
+      example: |
+        @SpringBootTest
+        class UserServiceIntegrationTest {
+            @Autowired
+            private UserService userService;
+            
+            @MockBean
+            private UserRepository userRepository;
+            
+            @Test
+            void shouldCreateUserWhenValidData() {
+                // Arrange
+                CreateUserRequest request = new CreateUserRequest("John", "john@example.com");
+                User savedUser = new User(1L, "John", "john@example.com");
+                when(userRepository.save(any(User.class))).thenReturn(savedUser);
+                
+                // Act
+                User result = userService.createUser(request);
+                
+                // Assert
+                assertThat(result).isNotNull();
+                assertThat(result.getId()).isEqualTo(1L);
+                verify(userRepository).save(any(User.class));
+            }
+        }
+  
+  quarkus_testing:
+    title: Testes em Quarkus
+    
+    test_resources:
+      title: Recursos de Teste
+      rules:
+        - Use @QuarkusTest para testes de integração
+        - Use RestAssured para testar endpoints REST
+        - Use @InjectMock para mockar CDI beans
+        - Considere usar Testcontainers para testes com bancos de dados reais
+      examples:
+        rest_test: |
+          @QuarkusTest
+          class UserResourceTest {
+              @InjectMock
+              UserService userService;
+              
+              @Test
+              void shouldReturnUserWhenGetById() {
+                  // Arrange
+                  User user = new User(1L, "John", "john@example.com");
+                  when(userService.findById(1L)).thenReturn(user);
+                  
+                  // Act & Assert
+                  given()
+                      .when().get("/api/users/1")
+                      .then()
+                         .statusCode(200)
+                         .body("id", equalTo(1))
+                         .body("name", equalTo("John"))
+                         .body("email", equalTo("john@example.com"));
+              }
+          }
+        service_test: |
+          @QuarkusTest
+          class UserServiceTest {
+              @InjectMock
+              UserRepository userRepository;
+              
+              @Inject
+              UserService userService;
+              
+              @Test
+              void shouldCreateUserWhenValidData() {
+                  // Arrange
+                  User user = new User(null, "John", "john@example.com");
+                  User savedUser = new User(1L, "John", "john@example.com");
+                  when(userRepository.persist(any(User.class))).thenReturn(null);
+                  when(userRepository.find("email", "john@example.com").firstResult()).thenReturn(savedUser);
+                  
+                  // Act
+                  User result = userService.createUser(user);
+                  
+                  // Assert
+                  assertThat(result).isNotNull();
+                  assertThat(result.getId()).isEqualTo(1L);
+              }
+          }
+  
+  test_coverage:
+    title: Cobertura de Testes
+    
+    coverage_strategies:
+      title: Estratégias de Cobertura
+      rules:
+        - Teste todos os fluxos principais (happy paths)
+        - Teste todos os fluxos de erro e exceções
+        - Teste edge cases e condições de limite
+        - Considere testes parametrizados para múltiplos cenários
+      example: |
+        @ParameterizedTest
+        @CsvSource({
+            "1, true",
+            "0, false",
+            "-1, false"
+        })
+        void shouldValidateIdWhenCheckingValidity(Long id, boolean expected) {
+            // Act
+            boolean result = userService.isValidId(id);
+            
+            // Assert
+            assertThat(result).isEqualTo(expected);
+        }
+    
+    boundary_testing:
+      title: Testes de Limite
+      rules:
+        - Teste valores nulos
+        - Teste coleções vazias
+        - Teste valores mínimos e máximos
+        - Teste casos especiais (como strings vazias, caracteres especiais)
+      examples:
+        null_testing: |
+          @Test
+          void shouldThrowExceptionWhenNameIsNull() {
+              // Arrange
+              CreateUserRequest request = new CreateUserRequest(null, "john@example.com");
+              
+              // Act & Assert
+              assertThrows(ValidationException.class, () -> userService.createUser(request));
+          }
+        empty_collection: |
+          @Test
+          void shouldReturnEmptyListWhenNoUsersFound() {
+              // Arrange
+              when(userRepository.findAll()).thenReturn(Collections.emptyList());
+              
+              // Act
+              List<User> result = userService.getAllUsers();
+              
+              // Assert
+              assertThat(result).isEmpty();
+          }
+    
+    mutation_testing:
+      title: Testes de Mutação
+      rules:
+        - Considere usar ferramentas como PIT para testes de mutação
+        - Verifique se os testes falham quando o código é alterado
+        - Melhore testes que não detectam mutações
+      example: |
+        // Configuração do PIT no pom.xml
+        <plugin>
+            <groupId>org.pitest</groupId>
+            <artifactId>pitest-maven</artifactId>
+            <version>1.9.11</version>
+            <dependencies>
+                <dependency>
+                    <groupId>org.pitest</groupId>
+                    <artifactId>pitest-junit5-plugin</artifactId>
+                    <version>1.1.0</version>
+                </dependency>
+            </dependencies>
+        </plugin>
+
+examples:
+  service_test:
+    title: Teste de Serviço
+    code: |
+      package com.example.service;
+      
+      import static org.assertj.core.api.Assertions.assertThat;
+      import static org.junit.jupiter.api.Assertions.assertThrows;
+      import static org.mockito.ArgumentMatchers.any;
+      import static org.mockito.Mockito.verify;
+      import static org.mockito.Mockito.when;
+      
+      import java.util.Arrays;
+      import java.util.List;
+      import java.util.Optional;
+      
+      import org.junit.jupiter.api.BeforeEach;
+      import org.junit.jupiter.api.DisplayName;
+      import org.junit.jupiter.api.Nested;
+      import org.junit.jupiter.api.Test;
+      import org.junit.jupiter.api.extension.ExtendWith;
+      import org.mockito.InjectMocks;
+      import org.mockito.Mock;
+      import org.mockito.junit.jupiter.MockitoExtension;
+      
+      import com.example.domain.User;
+      import com.example.dto.CreateUserRequest;
+      import com.example.exception.ResourceNotFoundException;
+      import com.example.repository.UserRepository;
+      
+      @ExtendWith(MockitoExtension.class)
+      @DisplayName("User Service Tests")
+      class UserServiceTest {
+          
+          @Mock
+          private UserRepository userRepository;
+          
+          @InjectMocks
+          private UserService userService;
+          
+          private User user1;
+          private User user2;
+          
+          @BeforeEach
+          void setUp() {
+              user1 = new User(1L, "John", "john@example.com");
+              user2 = new User(2L, "Jane", "jane@example.com");
+          }
+          
+          @Nested
+          @DisplayName("User Retrieval Tests")
+          class UserRetrievalTests {
+              
+              @Test
+              @DisplayName("Should return user when valid ID provided")
+              void shouldReturnUserWhenValidIdProvided() {
+                  // Arrange
+                  when(userRepository.findById(1L)).thenReturn(Optional.of(user1));
+                  
+                  // Act
+                  User result = userService.getUserById(1L);
+                  
+                  // Assert
+                  assertThat(result).isNotNull();
+                  assertThat(result.getId()).isEqualTo(1L);
+                  assertThat(result.getName()).isEqualTo("John");
+              }
+              
+              @Test
+              @DisplayName("Should throw exception when user not found")
+              void shouldThrowExceptionWhenUserNotFound() {
+                  // Arrange
+                  when(userRepository.findById(999L)).thenReturn(Optional.empty());
+                  
+                  // Act & Assert
+                  ResourceNotFoundException exception = assertThrows(
+                      ResourceNotFoundException.class,
+                      () -> userService.getUserById(999L)
+                  );
+                  
+                  assertThat(exception.getMessage()).contains("User not found");
+              }
+              
+              @Test
+              @DisplayName("Should return all users")
+              void shouldReturnAllUsers() {
+                  // Arrange
+                  List<User> users = Arrays.asList(user1, user2);
+                  when(userRepository.findAll()).thenReturn(users);
+                  
+                  // Act
+                  List<User> result = userService.getAllUsers();
+                  
+                  // Assert
+                  assertThat(result).hasSize(2);
+                  assertThat(result).extracting(User::getName).containsExactly("John", "Jane");
+              }
+          }
+          
+          @Nested
+          @DisplayName("User Creation Tests")
+          class UserCreationTests {
+              
+              @Test
+              @DisplayName("Should create user when valid data provided")
+              void shouldCreateUserWhenValidDataProvided() {
+                  // Arrange
+                  CreateUserRequest request = new CreateUserRequest("Alice", "alice@example.com");
+                  User newUser = new User(null, "Alice", "alice@example.com");
+                  User savedUser = new User(3L, "Alice", "alice@example.com");
+                  
+                  when(userRepository.save(any(User.class))).thenReturn(savedUser);
+                  
+                  // Act
+                  User result = userService.createUser(request);
+                  
+                  // Assert
+                  assertThat(result).isNotNull();
+                  assertThat(result.getId()).isEqualTo(3L);
+                  assertThat(result.getName()).isEqualTo("Alice");
+                  verify(userRepository).save(any(User.class));
+              }
+              
+              @Test
+              @DisplayName("Should throw exception when email is null")
+              void shouldThrowExceptionWhenEmailIsNull() {
+                  // Arrange
+                  CreateUserRequest request = new CreateUserRequest("Alice", null);
+                  
+                  // Act & Assert
+                  assertThrows(
+                      IllegalArgumentException.class,
+                      () -> userService.createUser(request)
+                  );
+              }
+          }
+      }
+  
+  controller_test:
+    title: Teste de Controller (Spring Boot)
+    code: |
+      package com.example.controller;
+      
+      import static org.mockito.ArgumentMatchers.any;
+      import static org.mockito.Mockito.when;
+      import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+      import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+      import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+      import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+      
+      import java.util.Arrays;
+      import java.util.List;
+      
+      import org.junit.jupiter.api.DisplayName;
+      import org.junit.jupiter.api.Test;
+      import org.springframework.beans.factory.annotation.Autowired;
+      import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+      import org.springframework.boot.test.mock.mockito.MockBean;
+      import org.springframework.http.MediaType;
+      import org.springframework.test.web.servlet.MockMvc;
+      
+      import com.example.domain.User;
+      import com.example.dto.CreateUserRequest;
+      import com.example.exception.ResourceNotFoundException;
+      import com.example.service.UserService;
+      import com.fasterxml.jackson.databind.ObjectMapper;
+      
+      @WebMvcTest(UserController.class)
+      @DisplayName("User Controller Tests")
+      class UserControllerTest {
+          
+          @Autowired
+          private MockMvc mockMvc;
+          
+          @Autowired
+          private ObjectMapper objectMapper;
+          
+          @MockBean
+          private UserService userService;
+          
+          @Test
+          @DisplayName("Should return user when GET /users/{id}")
+          void shouldReturnUserWhenGetUserById() throws Exception {
+              // Arrange
+              User user = new User(1L, "John", "john@example.com");
+              when(userService.getUserById(1L)).thenReturn(user);
+              
+              // Act & Assert
+              mockMvc.perform(get("/api/users/1"))
+                  .andExpect(status().isOk())
+                  .andExpect(jsonPath("$.id").value(1))
+                  .andExpect(jsonPath("$.name").value("John"))
+                  .andExpect(jsonPath("$.email").value("john@example.com"));
+          }
+          
+          @Test
+          @DisplayName("Should return 404 when user not found")
+          void shouldReturn404WhenUserNotFound() throws Exception {
+              // Arrange
+              when(userService.getUserById(999L))
+                  .thenThrow(new ResourceNotFoundException("User", "id", "999"));
+              
+              // Act & Assert
+              mockMvc.perform(get("/api/users/999"))
+                  .andExpect(status().isNotFound());
+          }
+          
+          @Test
+          @DisplayName("Should return all users when GET /users")
+          void shouldReturnAllUsersWhenGetUsers() throws Exception {
+              // Arrange
+              List<User> users = Arrays.asList(
+                  new User(1L, "John", "john@example.com"),
+                  new User(2L, "Jane", "jane@example.com")
+              );
+              when(userService.getAllUsers()).thenReturn(users);
+              
+              // Act & Assert
+              mockMvc.perform(get("/api/users"))
+                  .andExpect(status().isOk())
+                  .andExpect(jsonPath("$").isArray())
+                  .andExpect(jsonPath("$.length()").value(2))
+                  .andExpect(jsonPath("$[0].name").value("John"))
+                  .andExpect(jsonPath("$[1].name").value("Jane"));
+          }
+          
+          @Test
+          @DisplayName("Should create user when POST /users with valid data")
+          void shouldCreateUserWhenPostWithValidData() throws Exception {
+              // Arrange
+              CreateUserRequest request = new CreateUserRequest("Alice", "alice@example.com");
+              User createdUser = new User(3L, "Alice", "alice@example.com");
+              
+              when(userService.createUser(any(CreateUserRequest.class))).thenReturn(createdUser);
+              
+              // Act & Assert
+              mockMvc.perform(post("/api/users")
+                  .contentType(MediaType.APPLICATION_JSON)
+                  .content(objectMapper.writeValueAsString(request)))
+                  .andExpect(status().isCreated())
+                  .andExpect(jsonPath("$.id").value(3))
+                  .andExpect(jsonPath("$.name").value("Alice"));
+          }
+          
+          @Test
+          @DisplayName("Should return 400 when POST /users with invalid data")
+          void shouldReturn400WhenPostWithInvalidData() throws Exception {
+              // Arrange
+              CreateUserRequest request = new CreateUserRequest(null, "alice@example.com");
+              
+              // Act & Assert
+              mockMvc.perform(post("/api/users")
+                  .contentType(MediaType.APPLICATION_JSON)
+                  .content(objectMapper.writeValueAsString(request)))
+                  .andExpect(status().isBadRequest());
+          }
+      }
+  
+  quarkus_resource_test:
+    title: Teste de Resource (Quarkus)
+    code: |
+      package com.example.resource;
+      
+      import static io.restassured.RestAssured.given;
+      import static org.hamcrest.CoreMatchers.equalTo;
+      import static org.hamcrest.CoreMatchers.is;
+      import static org.mockito.ArgumentMatchers.any;
+      import static org.mockito.Mockito.when;
+      
+      import java.util.Arrays;
+      import java.util.List;
+      
+      import javax.ws.rs.core.MediaType;
+      
+      import org.junit.jupiter.api.DisplayName;
+      import org.junit.jupiter.api.Test;
+      
+      import com.example.domain.User;
+      import com.example.dto.CreateUserRequest;
+      import com.example.exception.ResourceNotFoundException;
+      import com.example.service.UserService;
+      
+      import io.quarkus.test.junit.QuarkusTest;
+      import io.quarkus.test.junit.mockito.InjectMock;
+      
+      @QuarkusTest
+      @DisplayName("User Resource Tests")
+      class UserResourceTest {
+          
+          @InjectMock
+          UserService userService;
+          
+          @Test
+          @DisplayName("Should return user when GET /users/{id}")
+          void shouldReturnUserWhenGetById() {
+              // Arrange
+              User user = new User(1L, "John", "john@example.com");
+              when(userService.getUserById(1L)).thenReturn(user);
+              
+              // Act & Assert
+              given()
+                  .when().get("/api/users/1")
+                  .then()
+                     .statusCode(200)
+                     .body("id", equalTo(1))
+                     .body("name", equalTo("John"))
+                     .body("email", equalTo("john@example.com"));
+          }
+          
+          @Test
+          @DisplayName("Should return 404 when user not found")
+          void shouldReturn404WhenUserNotFound() {
+              // Arrange
+              when(userService.getUserById(999L))
+                  .thenThrow(new ResourceNotFoundException("User", "id", "999"));
+              
+              // Act & Assert
+              given()
+                  .when().get("/api/users/999")
+                  .then()
+                     .statusCode(404);
+          }
+          
+          @Test
+          @DisplayName("Should return all users when GET /users")
+          void shouldReturnAllUsersWhenGetUsers() {
+              // Arrange
+              List<User> users = Arrays.asList(
+                  new User(1L, "John", "john@example.com"),
+                  new User(2L, "Jane", "jane@example.com")
+              );
+              when(userService.getAllUsers()).thenReturn(users);
+              
+              // Act & Assert
+              given()
+                  .when().get("/api/users")
+                  .then()
+                     .statusCode(200)
+                     .body("size()", is(2))
+                     .body("[0].name", equalTo("John"))
+                     .body("[1].name", equalTo("Jane"));
+          }
+          
+          @Test
+          @DisplayName("Should create user when POST /users with valid data")
+          void shouldCreateUserWhenPostWithValidData() {
+              // Arrange
+              CreateUserRequest request = new CreateUserRequest("Alice", "alice@example.com");
+              User createdUser = new User(3L, "Alice", "alice@example.com");
+              
+              when(userService.createUser(any(CreateUserRequest.class))).thenReturn(createdUser);
+              
+              // Act & Assert
+              given()
+                  .contentType(MediaType.APPLICATION_JSON)
+                  .body(request)
+                  .when().post("/api/users")
+                  .then()
+                     .statusCode(201)
+                     .body("id", equalTo(3))
+                     .body("name", equalTo("Alice"));
+          }
+      } 

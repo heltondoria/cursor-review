@@ -1,15 +1,16 @@
 ---
 description: ALWAYS follow this systematic process when analyzing errors to ensure thorough problem resolution. This rule enforces a structured approach for error investigation, root cause analysis, and solution evaluation.
-globs: "**/*.{ts,tsx,js,jsx}"
+globs: "**/*.java"
+alwaysApply: false
 ---
 
 <?xml version="1.0" encoding="UTF-8"?>
 <rule>
   <metadata>
     <name>error_analysis_process</name>
-    <description>Standards for systematic error analysis and resolution in the codebase</description>
+    <description>Processo de análise e resolução de erros</description>
     <priority>high</priority>
-    <version>1.0</version>
+    <version>1.1</version>
   </metadata>
 
   <process>
@@ -41,6 +42,31 @@ globs: "**/*.{ts,tsx,js,jsx}"
           <action>Identify patterns</action>
         </actions>
       </method>
+    </step>
+
+    <step name="historical_analysis">
+      <description>Análise do histórico de tentativas anteriores</description>
+      <format>
+        Tentativa 1: Abordagem utilizada
+        Resultado: Sucesso/falha e razão
+        
+        Tentativa 2: Abordagem utilizada
+        Resultado: Sucesso/falha e razão
+        
+        Padrões Identificados:
+        - Padrão 1
+        - Padrão 2
+        
+        Lições Aprendidas:
+        - Lição 1
+        - Lição 2
+      </format>
+      <requirements>
+        <item>Documentar todas as tentativas anteriores</item>
+        <item>Identificar padrões de falha</item>
+        <item>Avaliar efetividade das soluções</item>
+        <item>Evitar repetir abordagens já falhas</item>
+      </requirements>
     </step>
 
     <step name="solution_generation">

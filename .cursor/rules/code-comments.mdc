@@ -1,17 +1,18 @@
 ---
-description: ALWAYS use when writing or modifying code comments and documentation to ensure clarity and maintainability. This rule enforces standards for JSDoc, inline comments, and documentation best practices across the codebase.
-globs: "**/*.{ts,js,tsx,jsx}"
+description: ALWAYS use when writing or modifying code comments and documentation to ensure clarity and maintainability. This rule enforces standards for Java Doc, inline comments, and documentation best practices across the codebase.
+globs: "**/*.java"
+alwaysApply: false
 ---
 <?xml version="1.0" encoding="UTF-8"?>
 <cursor_rules>
     <rule>
         <name>code_comments</name>
-        <description>Standards for writing and maintaining code comments and documentation</description>
+        <description>Padrões para escrita e manutenção de comentários e documentação em código Java</description>
         
         <filters>
             <filter>
                 <type>file_extension</type>
-                <pattern>\.(ts|js|tsx|jsx)$</pattern>
+                <pattern>\.java$</pattern>
             </filter>
             <filter>
                 <type>content</type>
@@ -21,121 +22,252 @@ globs: "**/*.{ts,js,tsx,jsx}"
 
         <guidelines>
             <section name="general_comments">
-                <title>General Comment Guidelines</title>
-                <guideline>Comments should explain WHY, not WHAT</guideline>
+                <title>Diretrizes Gerais para Comentários</title>
+                <guideline>Comentários devem explicar POR QUE, não O QUE</guideline>
                 <details>
-                    <item>Code should be self-documenting for WHAT it does</item>
-                    <item>Comments explain business logic, complex algorithms, or non-obvious decisions</item>
+                    <item>O código deve ser autodocumentado quanto ao QUE ele faz</item>
+                    <item>Comentários explicam lógica de negócio, algoritmos complexos ou decisões não óbvias</item>
                 </details>
                 
-                <guideline>Keep comments current</guideline>
+                <guideline>Mantenha os comentários atualizados</guideline>
                 <details>
-                    <item>Update comments when code changes</item>
-                    <item>Remove outdated comments</item>
-                    <item>Avoid redundant comments - prefer self documenting code</item>
+                    <item>Atualize comentários quando o código mudar</item>
+                    <item>Remova comentários desatualizados</item>
+                    <item>Evite comentários redundantes - prefira código autodocumentado</item>
                 </details>
             </section>
 
-            <section name="jsdoc_standards">
-                <title>JSDoc Standards</title>
+            <section name="javadoc_standards">
+                <title>Padrões JavaDoc</title>
                 <coverage>
-                    <item>All classes and their members</item>
-                    <item>All functions and methods</item>
-                    <item>All interfaces and types</item>
-                    <item>All exported constants and variables</item>
-                    <item>All public APIs</item>
+                    <item>Todas as classes e seus membros</item>
+                    <item>Todos os métodos públicos e protegidos</item>
+                    <item>Todas as interfaces e enums</item>
+                    <item>APIs públicas e endpoints REST</item>
+                    <item>DTOs e modelos de domínio importantes</item>
                 </coverage>
 
                 <format>
                     <template>
                     /**
-                     * Brief description of the item
+                     * Breve descrição do item
                      * 
-                     * @param paramName - Parameter description
-                     * @returns Description of the return value
-                     * @throws {ErrorType} Description of when this error occurs
+                     * @param paramName Descrição do parâmetro
+                     * @return Descrição do valor de retorno
+                     * @throws ExceptionType Descrição de quando esta exceção ocorre
                      */
                     </template>
                 </format>
 
                 <supported_tags>
                     <tag>@param</tag>
-                    <tag>@returns</tag>
+                    <tag>@return</tag>
                     <tag>@throws</tag>
-                    <tag>@example</tag>
+                    <tag>@exception</tag>
                     <tag>@see</tag>
                     <tag>@link</tag>
                     <tag>@deprecated</tag>
                     <tag>@since</tag>
-                    <tag>@type</tag>
-                    <tag>@template</tag>
-                    <tag>@typedef</tag>
-                    <tag>@property</tag>
-                    <tag>@interface</tag>
-                    <tag>@class</tag>
-                    <tag>@extends</tag>
-                    <tag>@implements</tag>
+                    <tag>@author</tag>
+                    <tag>@version</tag>
+                    <tag>@code</tag>
+                    <tag>@implSpec</tag>
+                    <tag>@implNote</tag>
+                    <tag>@apiNote</tag>
                 </supported_tags>
 
                 <tag_rules>
-                    <rule>Use hyphen after parameter names: @param name - description</rule>
-                    <rule>Always specify parameter types when not inferrable</rule>
-                    <rule>Document all possible thrown errors</rule>
-                    <rule>Include examples for complex functionality</rule>
-                    <rule>Use markdown in descriptions for better readability</rule>
+                    <rule>Use primeira letra maiúscula e termine com ponto: @param nome Descrição detalhada.</rule>
+                    <rule>Documente todas as exceções que podem ser lançadas</rule>
+                    <rule>Inclua exemplos para funcionalidades complexas usando @code</rule>
+                    <rule>Use {@link} para referenciar outras classes ou métodos</rule>
+                    <rule>Use @implSpec para especificar o contrato de implementação</rule>
+                    <rule>Use @apiNote para fornecer recomendações sobre o uso da API</rule>
                 </tag_rules>
             </section>
 
+            <section name="spring_quarkus_specific">
+                <title>Comentários Específicos para Spring/Quarkus</title>
+                
+                <subsection name="rest_controllers">
+                    <guideline>Documente todos os endpoints REST</guideline>
+                    <template>
+                    /**
+                     * Breve descrição do endpoint
+                     * 
+                     * @param requestParam Descrição do parâmetro da requisição
+                     * @return Descrição do objeto de resposta
+                     * @throws ExceptionType Descrição das condições de erro
+                     */
+                    @GetMapping("/endpoint")
+                    public ResponseEntity&lt;ResponseType&gt; endpointMethod(
+                        @RequestParam String requestParam) {
+                        // Implementação
+                    }
+                    </template>
+                </subsection>
+                
+                <subsection name="service_layer">
+                    <guideline>Documente o propósito e responsabilidades do serviço</guideline>
+                    <guideline>Documente regras de negócio complexas</guideline>
+                    <template>
+                    /**
+                     * Serviço responsável por gerenciar operações relacionadas a [domínio].
+                     */
+                    @Service
+                    public class DomainService {
+                    
+                        /**
+                         * Realiza [operação de negócio] e retorna [resultado].
+                         *
+                         * @param input Dados necessários para a operação
+                         * @return Resultado da operação
+                         * @throws BusinessException Quando [condição de erro de negócio]
+                         */
+                        public Output businessOperation(Input input) {
+                            // Implementação
+                        }
+                    }
+                    </template>
+                </subsection>
+                
+                <subsection name="repositories">
+                    <guideline>Documente queries personalizadas e complexas</guideline>
+                    <template>
+                    /**
+                     * Repositório para acesso a dados da entidade [Entidade].
+                     */
+                    @Repository
+                    public interface EntityRepository extends JpaRepository&lt;Entity, Long&gt; {
+                    
+                        /**
+                         * Busca entidades por [critério específico].
+                         *
+                         * @param param Parâmetro para filtrar a busca
+                         * @return Lista de entidades que atendem ao critério
+                         */
+                        @Query("SELECT e FROM Entity e WHERE e.property = :param")
+                        List&lt;Entity&gt; findByCustomCriteria(@Param("param") String param);
+                    }
+                    </template>
+                </subsection>
+                
+                <subsection name="dto_models">
+                    <guideline>Documente propósito da classe e atributos importantes</guideline>
+                    <guideline>Explique regras de validação quando relevante</guideline>
+                    <template>
+                    /**
+                     * DTO que representa [conceito do domínio] para [operação/contexto].
+                     */
+                    public class DomainDTO {
+                    
+                        /**
+                         * Identificador único.
+                         */
+                        private Long id;
+                        
+                        /**
+                         * Nome do [entidade]. Não pode ser nulo e deve ter entre 3 e 100 caracteres.
+                         */
+                        @NotNull
+                        @Size(min = 3, max = 100)
+                        private String name;
+                        
+                        // Getters e setters
+                    }
+                    </template>
+                </subsection>
+            </section>
+
             <section name="inline_comments">
-                <title>Inline Comments</title>
+                <title>Comentários Inline</title>
                 <subsection name="single_line">
-                    <guideline>Use // for single-line comments</guideline>
-                    <guideline>Place above the code they describe</guideline>
-                    <guideline>Start with a space after //</guideline>
-                    <guideline>Use proper grammar and punctuation</guideline>
+                    <guideline>Use // para comentários de linha única</guideline>
+                    <guideline>Coloque acima do código que descrevem</guideline>
+                    <guideline>Comece com um espaço após //</guideline>
+                    <guideline>Use gramática e pontuação apropriadas</guideline>
                 </subsection>
 
                 <subsection name="todo">
-                    <guideline>Format: // TODO: (description)</guideline>
-                    <guideline>Include specific action items</guideline>
-                    <guideline>Add JIRA/issue reference when applicable</guideline>
+                    <guideline>Formato: // TODO: (descrição)</guideline>
+                    <guideline>Inclua itens de ação específicos</guideline>
+                    <guideline>Adicione referência JIRA/issue quando aplicável</guideline>
+                </subsection>
+                
+                <subsection name="block_comments">
+                    <guideline>Use /* */ para comentários de múltiplas linhas</guideline>
+                    <guideline>Reserve para explicações de algoritmos complexos</guideline>
+                    <guideline>Evite blocos grandes de comentários em meio ao código funcional</guideline>
                 </subsection>
             </section>
 
             <section name="examples">
-                <title>Examples</title>
+                <title>Exemplos</title>
                 <example type="good">
-                    <title>Good JSDoc</title>
+                    <title>Bom JavaDoc</title>
                     <code>
                     /**
-                     * Processes user data and returns a formatted result
+                     * Processa dados do usuário de acordo com as regras de negócio especificadas
+                     * e retorna o resultado formatado.
                      * 
-                     * @param userData - The raw user information to process
-                     * @param options - Configuration options for processing
-                     * @returns Formatted user data object
-                     * @throws {ValidationError} When user data is invalid
-                     * @example
-                     * ```typescript
-                     * const result = processUserData({ name: 'John' }, { format: 'json' });
-                     * ```
+                     * @param userData Os dados brutos do usuário a serem processados
+                     * @param options Opções de configuração para processamento
+                     * @return Objeto de dados do usuário formatado
+                     * @throws ValidationException Quando os dados do usuário são inválidos
+                     * @see UserValidator#validate(UserData)
                      */
-                    function processUserData(userData: UserData, options: ProcessOptions): FormattedData {
-                      // Implementation
+                    public FormattedData processUserData(UserData userData, ProcessOptions options) {
+                        // Implementação
+                    }
+                    </code>
+                </example>
+
+                <example type="good">
+                    <title>Bom JavaDoc para Controller REST</title>
+                    <code>
+                    /**
+                     * Endpoint para criar um novo usuário no sistema.
+                     * 
+                     * @param userDTO DTO contendo os dados necessários para criar um usuário
+                     * @return Objeto DTO com informações do usuário criado
+                     * @throws DuplicateResourceException Se já existir um usuário com o mesmo email
+                     * @throws ValidationException Se os dados fornecidos forem inválidos
+                     */
+                    @PostMapping("/users")
+                    public ResponseEntity&lt;UserResponseDTO&gt; createUser(@Valid @RequestBody UserCreateDTO userDTO) {
+                        // Implementação
                     }
                     </code>
                 </example>
 
                 <example type="bad">
-                    <title>Bad JSDoc</title>
+                    <title>JavaDoc Ruim</title>
                     <code>
-                    // Don't do this
+                    // Não faça isso
                     /**
-                     * @param userData user data
-                     * @param options options
+                     * @param userData dados do usuário
+                     * @param options opções
                      */
-                    function processUserData(userData, options) {
-                      // Implementation
+                    public FormattedData processUserData(UserData userData, ProcessOptions options) {
+                        // Implementação
                     }
+                    </code>
+                </example>
+                
+                <example type="bad">
+                    <title>Comentários Desnecessários</title>
+                    <code>
+                    // Cria um usuário
+                    User user = new User();
+                    
+                    // Define o nome
+                    user.setName(name);
+                    
+                    // Define o email
+                    user.setEmail(email);
+                    
+                    // Salva o usuário
+                    userRepository.save(user);
                     </code>
                 </example>
             </section>
