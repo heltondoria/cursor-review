@@ -57,6 +57,8 @@ buildNumber.properties
 spring-boot-starter*/
 spring-boot-autoconfigure*/
 spring-boot-actuator*/
+.springBeans
+.sts4-cache
 
 # Diretórios de build
 build/
@@ -95,3 +97,8 @@ application-*.yml
 application-*.properties
 !application-example.yml
 !application-example.properties
+
+# Específico do projeto
+.cursor/
+.ai/
+!.ai/*.story.md
