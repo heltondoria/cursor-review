@@ -13,7 +13,7 @@ O CodeReview MCP Server é um servidor baseado no protocolo Model Context Protoc
 
 ## Estrutura do Projeto
 
-```
+```code
 com.codereview.mcp
 ├── CodeReviewMcpServerApplication.java
 ├── config
