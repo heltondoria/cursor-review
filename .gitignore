@@ -28,3 +28,70 @@ Thumbs.db
 *.vsix
 coverage
 !__mocks__
+
+# Arquivos compilados Java
+*.class
+*.jar
+*.war
+*.ear
+*.zip
+*.tar.gz
+*.rar
+hs_err_pid*
+replay_pid*
+
+# Diretórios Maven
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+.mvn/timing.properties
+.mvn/wrapper/maven-wrapper.jar
+
+# Diretórios Spring Boot
+.spring-boot-devtools
+spring-boot-starter*/
+spring-boot-autoconfigure*/
+spring-boot-actuator*/
+
+# Diretórios de build
+build/
+bin/
+out/
+dist/
+
+# IDE e editores
+.idea/
+*.iws
+*.iml
+*.ipr
+.vscode/
+*.code-workspace
+.classpath
+.project
+.settings/
+.metadata/
+.factorypath
+nbproject/
+nbactions.xml
+nb-configuration.xml
+.apt_generated/
+.apt_generated_test/
+.sts4-cache/
+
+# Sistema operacional
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Arquivos de ambiente
+.env
+.env.local
+application-*.yml
+application-*.properties
+!application-example.yml
+!application-example.properties
