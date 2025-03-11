@@ -1,77 +1,149 @@
-# CodeReview MCP Server
+# Servidor MCP para Revisão de Código
 
-Servidor MCP (Model Context Protocol) para revisão de código automatizada.
+Este projeto implementa um servidor MCP (Model Context Protocol) para revisão de código, projetado para ser usado com IDEs que suportam o protocolo MCP, como o Cursor.
 
-## Descrição
+## Funcionalidades
 
-O CodeReview MCP Server é um servidor baseado no protocolo Model Context Protocol (MCP) que fornece capacidades de revisão de código automatizada para modelos de linguagem. O servidor é implementado em Java com Spring Boot e o SDK Java MCP, suportando inicialmente o transporte stdio para integração com clientes como o Cursor e o Claude Desktop.
+- Revisão de código em diferentes linguagens de programação
+- Detecção automática da linguagem com base na extensão do arquivo
+- Suporte para arquivos grandes através de estratégia de chunking
+- Filtragem de comentários por severidade e categoria
+- Prompts personalizados para diferentes tipos de revisão
+- Ferramentas especializadas para revisão de segurança e performance
 
 ## Requisitos
 
-- Java 21 ou superior
+- Java 17 ou superior
 - Maven 3.8 ou superior
+- IDE com suporte a MCP (como Cursor)
 
-## Estrutura do Projeto
+## Configuração
 
-```code
-com.codereview.mcp
-├── CodeReviewMcpServerApplication.java
-├── config
-│   ├── McpConfig.java
-│   ├── McpServerConfig.java
-│   ├── TransportConfig.java
-│   └── TransportType.java
-├── core
-│   ├── McpServer.java
-│   ├── resource
-│   │   ├── CodeResource.java
-│   │   ├── ResourceManager.java
-│   │   └── ResourceType.java
-│   ├── tool
-│   │   ├── ReviewTool.java
-│   │   ├── ToolManager.java
-│   │   └── ToolResult.java
-│   └── prompt
-│       ├── PromptManager.java
-│       └── ReviewPrompt.java
-├── transport
-│   ├── Transport.java
-│   ├── TransportFactory.java
-│   └── stdio
-│       └── StdioTransport.java
-└── util
-    └── LoggingUtil.java
+O arquivo `application.properties` contém as configurações do servidor MCP:
+
+```properties
+# Configurações do servidor MCP
+spring.ai.mcp.server.name=CodeReview MCP Server
+spring.ai.mcp.server.version=0.1.0
+spring.ai.mcp.server.transport.type=STDIO
+
+# Configurações específicas da aplicação
+app.review.max-file-size=1MB
+app.review.default-min-severity=2
+app.review.chunk-size=500
+app.review.chunk-overlap=50
 ```
 
-## Compilação
+## Ferramentas MCP
 
-Para compilar o projeto, execute:
+O servidor expõe as seguintes ferramentas MCP:
+
+### reviewCode
+
+Revisa um arquivo de código e fornece sugestões de melhoria.
+
+Parâmetros:
+- `fileName`: Nome do arquivo
+- `fileContent`: Conteúdo do arquivo
+- `minSeverity` (opcional): Severidade mínima dos comentários (1-5, padrão: 2)
+- `categories` (opcional): Categorias de comentários separadas por vírgula
+- `customPrompt` (opcional): Prompt personalizado para a revisão
+- `debug` (opcional): Modo de depuração
+
+### reviewCriticalIssues
+
+Revisa um arquivo de código e retorna apenas os problemas críticos (severidade >= 4).
+
+Parâmetros:
+- `fileName`: Nome do arquivo
+- `fileContent`: Conteúdo do arquivo
+
+### reviewSecurity
+
+Revisa um arquivo de código focando em problemas de segurança.
+
+Parâmetros:
+- `fileName`: Nome do arquivo
+- `fileContent`: Conteúdo do arquivo
+
+### reviewPerformance
+
+Revisa um arquivo de código focando em problemas de performance.
+
+Parâmetros:
+- `fileName`: Nome do arquivo
+- `fileContent`: Conteúdo do arquivo
+
+## Modelo de Dados
+
+### ReviewOptions
+
+Opções para personalizar a revisão de código:
+
+- `minSeverity`: Severidade mínima dos comentários (1-5)
+- `categories`: Lista de categorias a serem incluídas
+- `customPrompt`: Prompt personalizado para a revisão
+- `debug`: Modo de depuração
+
+### ReviewComment
+
+Representa um comentário de revisão:
+
+- `file`: Nome do arquivo
+- `line`: Número da linha
+- `comment`: Texto do comentário
+- `severity`: Severidade (1-5)
+- `category`: Categoria do comentário
+
+### ReviewResult
+
+Resultado da revisão de código:
+
+- `fileName`: Nome do arquivo revisado
+- `comments`: Lista de comentários
+- `severityCounts`: Contagem de comentários por severidade
+- `processingTimeMs`: Tempo de processamento em milissegundos
+
+## Compilação e Execução
+
+Para compilar o projeto:
 
 ```bash
 mvn clean package
 ```
 
-## Execução
-
-Para executar o servidor, execute:
+Para executar o servidor MCP:
 
 ```bash
 java -jar target/mcp-server-0.1.0-SNAPSHOT.jar
 ```
 
-## Configuração
+## Uso com Cursor
 
-As configurações do servidor podem ser ajustadas no arquivo `application.properties`:
+1. Inicie o servidor MCP
+2. No Cursor, conecte-se ao servidor MCP através da janela de chat
+3. Use as ferramentas MCP para revisar seu código
 
-```properties
-# Configurações do servidor MCP
-mcp.server.serverName=CodeReview MCP Server
-mcp.server.serverVersion=0.1.0
-mcp.server.transportType=STDIO
+## Estrutura do Projeto
 
-# Configurações de logging
-logging.level.root=INFO
-logging.level.com.codereview.mcp=DEBUG
+```
+src/main/java/com/codereview/mcp/
+├── CodeReviewMcpApplication.java
+├── config/
+│   └── McpConfig.java
+├── model/
+│   ├── ReviewComment.java
+│   ├── ReviewOptions.java
+│   └── ReviewResult.java
+├── service/
+│   └── ReviewService.java
+├── tool/
+│   └── ReviewTool.java
+└── util/
+    ├── ChunkingStrategy.java
+    ├── LanguageDetector.java
+    ├── PromptGenerator.java
+    └── ReviewResultFormatter.java
 ```
 
 ## Licença
