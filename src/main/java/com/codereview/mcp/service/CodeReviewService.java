@@ -14,8 +14,6 @@ import java.util.Arrays;
 @Service
 public class CodeReviewService {
     
-    private static final Logger logger = LoggerFactory.getLogger(CodeReviewService.class);
-
     /**
      * Revisa um arquivo de código.
      * 
