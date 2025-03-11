@@ -2,14 +2,12 @@ package com.codereview.mcp;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.ComponentScan;
 
 /**
- * Classe principal da aplicação do servidor MCP para revisão de código.
- * Inicializa o contexto Spring e configura o servidor MCP.
+ * Aplicação principal do servidor MCP para revisão de código.
+ * Utiliza o Spring AI MCP Server Boot Starter para WebFlux.
  */
 @SpringBootApplication
-@ComponentScan(basePackages = "com.codereview.mcp")
 public class CodeReviewMcpServerApplication {
 
     /**

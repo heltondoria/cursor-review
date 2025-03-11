@@ -1,25 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.4.3</version>
+        <version>3.3.6</version>
         <relativePath /> <!-- lookup parent from repository -->
     </parent>
-    <groupId>com.codereview</groupId>
-    <artifactId>mcp-server</artifactId>
-    <version>0.1.0-SNAPSHOT</version>
-    <name>CodeReview MCP Server</name>
-    <description>Servidor MCP para revisão de código automatizada</description>
-    
-    <properties>
-        <java.version>21</java.version>
-        <maven.compiler.source>21</maven.compiler.source>
-        <maven.compiler.target>21</maven.compiler.target>
-    </properties>
-    
+
+    <groupId>com.example</groupId>
+
+    <artifactId>mcp-weather-starter-webflux-server</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+
+    <name>Spring AI MCP Weather Sample</name>
+    <description>Sample Spring Boot application demonstrating MCP client and server usage</description>
+
     <dependencyManagement>
         <dependencies>
             <dependency>
@@ -38,7 +36,7 @@
             <artifactId>spring-ai-mcp-server-webflux-spring-boot-starter</artifactId>
         </dependency>
     </dependencies>
-    
+
     <build>
         <plugins>
             <plugin>
@@ -77,4 +75,5 @@
             </releases>
         </repository>
     </repositories>
-</project> 
+
+</project>

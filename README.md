@@ -56,7 +56,7 @@ mvn clean package
 Para executar o servidor, execute:
 
 ```bash
-java -jar target/mcp-server-0.0.1-SNAPSHOT.jar
+java -jar target/mcp-server-0.1.0-SNAPSHOT.jar
 ```
 
 ## Configuração

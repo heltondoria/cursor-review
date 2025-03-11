@@ -1,0 +1,85 @@
+2025-03-10T02:18:30.209-03:00  INFO 763282 --- [main] c.c.mcp.CodeReviewMcpServerApplication   : Starting CodeReviewMcpServerApplication v0.1.0-SNAPSHOT using Java 21.0.6 with PID 763282 (/home/heltoncosta/Documentos/projects/ia/tools/cursor-review/target/mcp-server-0.1.0-SNAPSHOT.jar started by heltoncosta in /home/heltoncosta/Documentos/projects/ia/tools/cursor-review)
+2025-03-10T02:18:30.210-03:00 DEBUG 763282 --- [main] c.c.mcp.CodeReviewMcpServerApplication   : Running with Spring Boot v3.2.3, Spring v6.1.4
+2025-03-10T02:18:30.211-03:00  INFO 763282 --- [main] c.c.mcp.CodeReviewMcpServerApplication   : No active profile set, falling back to 1 default profile: "default"
+2025-03-10T02:18:30.818-03:00  INFO 763282 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2025-03-10T02:18:30.825-03:00  INFO 763282 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-03-10T02:18:30.825-03:00  INFO 763282 --- [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.19]
+2025-03-10T02:18:30.843-03:00  INFO 763282 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-03-10T02:18:30.844-03:00  INFO 763282 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 592 ms
+2025-03-10T02:18:31.057-03:00  INFO 763282 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path ''
+2025-03-10T02:18:31.065-03:00  INFO 763282 --- [main] c.c.mcp.CodeReviewMcpServerApplication   : Started CodeReviewMcpServerApplication in 1.139 seconds (process running for 1.363)
+2025-03-10T02:18:31.068-03:00  INFO 763282 --- [main] com.codereview.mcp.util.LoggingUtil      : Configurando sistema de logging
+2025-03-10T02:18:31.069-03:00  INFO 763282 --- [main] com.codereview.mcp.util.LoggingUtil      : Sistema de logging configurado com sucesso
+2025-03-10T02:18:31.069-03:00  INFO 763282 --- [main] com.codereview.mcp.core.McpServer        : Inicializando servidor MCP: CodeReview MCP Server
+2025-03-10T02:18:31.070-03:00  INFO 763282 --- [main] com.codereview.mcp.core.McpServer        : Versão: 0.1.0
+2025-03-10T02:18:31.070-03:00  INFO 763282 --- [main] com.codereview.mcp.core.McpServer        : Tipo de transporte: STDIO
+2025-03-10T02:18:31.071-03:00  INFO 763282 --- [main] c.c.mcp.core.resource.ResourceManager    : Inicializando gerenciador de recursos
+2025-03-10T02:18:31.071-03:00  INFO 763282 --- [main] c.codereview.mcp.core.tool.ToolManager   : Inicializando gerenciador de ferramentas
+2025-03-10T02:18:31.071-03:00  INFO 763282 --- [main] c.c.mcp.core.prompt.PromptManager        : Inicializando gerenciador de prompts
+2025-03-10T02:18:31.071-03:00  INFO 763282 --- [main] c.c.mcp.transport.TransportFactory       : Criando transporte do tipo: STDIO
+2025-03-10T02:18:31.071-03:00  INFO 763282 --- [main] c.c.mcp.transport.TransportFactory       : Criando transporte stdio
+2025-03-10T02:18:31.072-03:00  INFO 763282 --- [main] c.c.mcp.transport.stdio.StdioTransport   : Inicializando transporte stdio
+2025-03-10T02:18:31.073-03:00  INFO 763282 --- [main] c.c.mcp.transport.stdio.StdioTransport   : Registrando handler de mensagens
+2025-03-10T02:18:31.073-03:00  INFO 763282 --- [main] c.c.mcp.transport.stdio.StdioTransport   : Iniciando transporte stdio
+2025-03-10T02:18:31.073-03:00  INFO 763282 --- [pool-2-thread-1] c.c.mcp.transport.stdio.StdioTransport   : Aguardando mensagens na entrada padrão
+2025-03-10T02:18:31.085-03:00  INFO 763282 --- [main] com.codereview.mcp.core.McpServer        : Enviando mensagem de inicialização: {"id":"3668a4fa-462f-4f06-a5fa-f60ce830c661","type":"init","content":{"serverVersion":"0.1.0","capabilities":{"resources":true,"tools":true,"prompts":true},"serverName":"CodeReview MCP Server","protocolVersion":"2024-11-05"}}
+2025-03-10T02:18:31.089-03:00 DEBUG 763282 --- [main] c.c.mcp.transport.stdio.StdioTransport   : Enviando mensagem JSON: {"id":"3668a4fa-462f-4f06-a5fa-f60ce830c661","type":"init","content":{"serverVersion":"0.1.0","capabilities":{"resources":true,"tools":true,"prompts":true},"serverName":"CodeReview MCP Server","protocolVersion":"2024-11-05"}}
+2025-03-10T02:18:31.089-03:00  INFO 763282 --- [main] com.codereview.mcp.core.McpServer        : Servidor MCP inicializado com sucesso
+2025-03-10T02:18:31.093-03:00 DEBUG 763282 --- [pool-2-thread-1] c.c.mcp.transport.stdio.StdioTransport   : Mensagem MCP recebida: {jsonrpc=2.0, id=0, method=initialize, params={protocolVersion=2024-11-05, capabilities={sampling={}, roots={listChanged=true}}, clientInfo={name=mcp-inspector, version=0.0.1}}}
+2025-03-10T02:18:31.093-03:00  INFO 763282 --- [pool-2-thread-1] com.codereview.mcp.core.McpServer        : Mensagem recebida do cliente: {"jsonrpc":"2.0","id":0,"method":"initialize","params":{"protocolVersion":"2024-11-05","capabilities":{"sampling":{},"roots":{"listChanged":true}},"clientInfo":{"name":"mcp-inspector","version":"0.0.1"}}}
+2025-03-10T02:18:54.827-03:00  INFO 763282 --- [pool-2-thread-1] c.c.mcp.transport.stdio.StdioTransport   : Transporte stdio finalizado
+2025-03-10T19:40:15.386-03:00  INFO 2707704 --- [main] c.codereview.mcp.server.SimpleMcpServer  : Inicializando servidor MCP: CodeReview MCP Server
+2025-03-10T19:40:15.388-03:00  INFO 2707704 --- [main] c.codereview.mcp.server.SimpleMcpServer  : Versão: 0.1.0
+2025-03-10T19:40:15.423-03:00 DEBUG 2707704 --- [main] c.codereview.mcp.server.SimpleMcpServer  : Enviando mensagem: {"type":"init","id":"e2079e86-a285-4034-bd2a-8b89961864f5","content":{"serverVersion":"0.1.0","capabilities":{"resources":true,"tools":true,"prompts":true},"serverName":"CodeReview MCP Server","protocolVersion":"2024-11-05"}}
+2025-03-10T19:40:15.423-03:00  INFO 2707704 --- [main] c.codereview.mcp.server.SimpleMcpServer  : Iniciando servidor MCP
+2025-03-10T19:40:15.424-03:00  INFO 2707704 --- [main] com.codereview.mcp.util.LoggingUtil      : Configurando sistema de logging
+2025-03-10T19:40:15.424-03:00  INFO 2707704 --- [main] com.codereview.mcp.util.LoggingUtil      : Sistema de logging configurado com sucesso
+2025-03-10T19:40:15.424-03:00  INFO 2707704 --- [main] com.codereview.mcp.core.McpServer        : Inicializando servidor MCP: CodeReview MCP Server
+2025-03-10T19:40:15.424-03:00  INFO 2707704 --- [main] com.codereview.mcp.core.McpServer        : Versão: 0.1.0
+2025-03-10T19:40:15.424-03:00  INFO 2707704 --- [pool-2-thread-1] c.codereview.mcp.server.SimpleMcpServer  : Aguardando mensagens na entrada padrão
+2025-03-10T19:40:15.424-03:00  INFO 2707704 --- [main] com.codereview.mcp.core.McpServer        : Tipo de transporte: STDIO
+2025-03-10T19:40:15.424-03:00  INFO 2707704 --- [main] c.c.mcp.core.resource.ResourceManager    : Inicializando gerenciador de recursos
+2025-03-10T19:40:15.424-03:00  INFO 2707704 --- [main] c.codereview.mcp.core.tool.ToolManager   : Inicializando gerenciador de ferramentas
+2025-03-10T19:40:15.424-03:00  INFO 2707704 --- [main] c.c.mcp.core.prompt.PromptManager        : Inicializando gerenciador de prompts
+2025-03-10T19:40:15.424-03:00  INFO 2707704 --- [main] c.c.mcp.transport.TransportFactory       : Criando transporte do tipo: STDIO
+2025-03-10T19:40:15.424-03:00  INFO 2707704 --- [main] c.c.mcp.transport.TransportFactory       : Criando transporte stdio
+2025-03-10T19:40:15.425-03:00  INFO 2707704 --- [main] c.c.mcp.transport.stdio.StdioTransport   : Inicializando transporte stdio
+2025-03-10T19:40:15.425-03:00  INFO 2707704 --- [main] c.c.mcp.transport.stdio.StdioTransport   : Registrando handler de mensagens
+2025-03-10T19:40:15.425-03:00  INFO 2707704 --- [main] c.c.mcp.transport.stdio.StdioTransport   : Iniciando transporte stdio
+2025-03-10T19:40:15.425-03:00  INFO 2707704 --- [pool-3-thread-1] c.c.mcp.transport.stdio.StdioTransport   : Aguardando mensagens na entrada padrão
+2025-03-10T19:40:15.426-03:00  INFO 2707704 --- [main] com.codereview.mcp.core.McpServer        : Enviando mensagem de inicialização: {"id":"fa3322f8-bf71-41e9-ab1f-349429960a26","type":"init","content":{"serverVersion":"0.1.0","capabilities":{"resources":true,"tools":true,"prompts":true},"serverName":"CodeReview MCP Server","protocolVersion":"2024-11-05"}}
+2025-03-10T19:40:15.431-03:00 DEBUG 2707704 --- [main] c.c.mcp.transport.stdio.StdioTransport   : Enviando mensagem JSON: {"id":"fa3322f8-bf71-41e9-ab1f-349429960a26","type":"init","content":{"serverVersion":"0.1.0","capabilities":{"resources":true,"tools":true,"prompts":true},"serverName":"CodeReview MCP Server","protocolVersion":"2024-11-05"}}
+2025-03-10T19:40:15.431-03:00  INFO 2707704 --- [main] com.codereview.mcp.core.McpServer        : Servidor MCP inicializado com sucesso
+2025-03-10T19:40:15.446-03:00 ERROR 2707704 --- [pool-2-thread-1] c.codereview.mcp.server.SimpleMcpServer  : Erro ao processar mensagem: {"jsonrpc":"2.0","id":0,"method":"initialize","params":{"protocolVersion":"2024-11-05","capabilities":{"sampling":{},"roots":{"listChanged":true}},"clientInfo":{"name":"mcp-inspector","version":"0.0.1"}}}
+
+com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException: Unrecognized field "jsonrpc" (class com.codereview.mcp.model.McpMessage), not marked as ignorable (3 known properties: "content", "type", "id"])
+ at [Source: (String)"{"jsonrpc":"2.0","id":0,"method":"initialize","params":{"protocolVersion":"2024-11-05","capabilities":{"sampling":{},"roots":{"listChanged":true}},"clientInfo":{"name":"mcp-inspector","version":"0.0.1"}}}"; line: 1, column: 13] (through reference chain: com.codereview.mcp.model.McpMessage["jsonrpc"])
+	at com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException.from(UnrecognizedPropertyException.java:61) ~[jackson-databind-2.15.4.jar!/:2.15.4]
+	at com.fasterxml.jackson.databind.DeserializationContext.handleUnknownProperty(DeserializationContext.java:1138) ~[jackson-databind-2.15.4.jar!/:2.15.4]
+	at com.fasterxml.jackson.databind.deser.std.StdDeserializer.handleUnknownProperty(StdDeserializer.java:2224) ~[jackson-databind-2.15.4.jar!/:2.15.4]
+	at com.fasterxml.jackson.databind.deser.BeanDeserializerBase.handleUnknownProperty(BeanDeserializerBase.java:1719) ~[jackson-databind-2.15.4.jar!/:2.15.4]
+	at com.fasterxml.jackson.databind.deser.BeanDeserializerBase.handleUnknownVanilla(BeanDeserializerBase.java:1697) ~[jackson-databind-2.15.4.jar!/:2.15.4]
+	at com.fasterxml.jackson.databind.deser.BeanDeserializer.vanillaDeserialize(BeanDeserializer.java:320) ~[jackson-databind-2.15.4.jar!/:2.15.4]
+	at com.fasterxml.jackson.databind.deser.BeanDeserializer.deserialize(BeanDeserializer.java:177) ~[jackson-databind-2.15.4.jar!/:2.15.4]
+	at com.fasterxml.jackson.databind.deser.DefaultDeserializationContext.readRootValue(DefaultDeserializationContext.java:323) ~[jackson-databind-2.15.4.jar!/:2.15.4]
+	at com.fasterxml.jackson.databind.ObjectMapper._readMapAndClose(ObjectMapper.java:4825) ~[jackson-databind-2.15.4.jar!/:2.15.4]
+	at com.fasterxml.jackson.databind.ObjectMapper.readValue(ObjectMapper.java:3772) ~[jackson-databind-2.15.4.jar!/:2.15.4]
+	at com.fasterxml.jackson.databind.ObjectMapper.readValue(ObjectMapper.java:3740) ~[jackson-databind-2.15.4.jar!/:2.15.4]
+	at com.codereview.mcp.server.SimpleMcpServer.lambda$start$0(SimpleMcpServer.java:65) ~[!/:0.1.0-SNAPSHOT]
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:572) ~[na:na]
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317) ~[na:na]
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144) ~[na:na]
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642) ~[na:na]
+	at java.base/java.lang.Thread.run(Thread.java:1583) ~[na:na]
+
+2025-03-10T19:40:19.943-03:00  INFO 2707704 --- [pool-3-thread-1] c.c.mcp.transport.stdio.StdioTransport   : Transporte stdio finalizado
+2025-03-10T19:40:19.943-03:00  INFO 2707704 --- [pool-2-thread-1] c.codereview.mcp.server.SimpleMcpServer  : Servidor MCP finalizado
+2025-03-10T23:14:15.405-03:00  INFO 3118082 --- [main] c.c.mcp.CodeReviewMcpServerApplication   : Starting CodeReviewMcpServerApplication v0.1.0-SNAPSHOT using Java 21.0.6 with PID 3118082 (/home/heltoncosta/Documentos/projects/ia/tools/cursor-review/target/mcp-server-0.1.0-SNAPSHOT.jar started by heltoncosta in /home/heltoncosta/Documentos/projects/ia/tools/cursor-review)
+2025-03-10T23:14:15.406-03:00 DEBUG 3118082 --- [main] c.c.mcp.CodeReviewMcpServerApplication   : Running with Spring Boot v3.4.3, Spring v6.2.3
+2025-03-10T23:14:15.407-03:00  INFO 3118082 --- [main] c.c.mcp.CodeReviewMcpServerApplication   : No active profile set, falling back to 1 default profile: "default"
+2025-03-10T23:14:16.101-03:00  INFO 3118082 --- [main] o.s.a.a.m.s.McpServerAutoConfiguration   : Registered tools: 2, notification: true
+2025-03-10T23:14:16.141-03:00  INFO 3118082 --- [pool-4-thread-1] i.m.server.McpAsyncServer                : Client initialize request - Protocol: 2024-11-05, Capabilities: ClientCapabilities[experimental=null, roots=RootCapabilities[listChanged=true], sampling=Sampling[]], Info: Implementation[name=mcp-inspector, version=0.0.1]
+2025-03-10T23:14:16.213-03:00  INFO 3118082 --- [main] o.s.b.web.embedded.netty.NettyWebServer  : Netty started on port 8080 (http)
+2025-03-10T23:14:16.221-03:00  INFO 3118082 --- [main] c.c.mcp.CodeReviewMcpServerApplication   : Started CodeReviewMcpServerApplication in 1.059 seconds (process running for 1.295)
+2025-03-10T23:14:37.140-03:00  INFO 3118082 --- [boundedElastic-1] c.c.mcp.service.CodeReviewService        : Revisando código em null
+2025-03-10T23:15:03.335-03:00  INFO 3118082 --- [boundedElastic-1] c.c.mcp.service.CodeReviewService        : Revisando código em java
